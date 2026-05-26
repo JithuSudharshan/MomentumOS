@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-background text-slate-50 antialiased selection:bg-aurora-purple/30 overflow-x-hidden;
+    font-family: 'Outfit', 'Inter', sans-serif;
+  }
+}
+
+@layer utilities {
+  .glass-card {
+    @apply bg-background-secondary/40 backdrop-blur-xl border border-white/5 shadow-glass rounded-3xl transition-all duration-500 ease-out;
+  }
+  
+  .glass-card:hover {
+    @apply shadow-glass-hover bg-background-secondary/60 border-white/10;
+  }
+
+  .glass-input {
+    @apply w-full bg-black/20 backdrop-blur-md border border-white/5 rounded-2xl p-5 text-slate-50 placeholder:text-slate-400 focus:outline-none focus:border-aurora-purple/50 focus:ring-1 focus:ring-aurora-purple/50 transition-all duration-300;
+  }
+}
