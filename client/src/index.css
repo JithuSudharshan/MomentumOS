@@ -1,26 +1,85 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Alegreya+Sans+SC:wght@600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
-    @apply bg-background text-slate-50 antialiased selection:bg-aurora-purple/30 overflow-x-hidden;
-    font-family: 'Outfit', 'Inter', sans-serif;
+    @apply bg-background text-slate-50 antialiased selection:bg-vanguard-slate/30 overflow-x-hidden;
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    background-color: #0A0C10;
+    background-image: radial-gradient(circle at 20% 20%, rgba(45, 212, 191, 0.08), transparent 18%), radial-gradient(circle at 80% 10%, rgba(167, 139, 250, 0.1), transparent 20%), radial-gradient(circle at 50% 80%, rgba(251, 146, 60, 0.08), transparent 22%);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: 'Alegreya Sans SC', 'Inter', sans-serif;
   }
 }
 
 @layer utilities {
   .glass-card {
-    @apply bg-background-secondary/40 backdrop-blur-xl border border-white/5 shadow-glass rounded-3xl transition-all duration-500 ease-out;
-  }
-  
-  .glass-card:hover {
-    @apply shadow-glass-hover bg-background-secondary/60 border-white/10;
+    @apply bg-background-panel/85 backdrop-blur-2xl border border-white/10 shadow-glass rounded-[2rem] transition-all duration-500 ease-out;
   }
 
-  .glass-input {
-    @apply w-full bg-black/20 backdrop-blur-md border border-white/5 rounded-2xl p-5 text-slate-50 placeholder:text-slate-400 focus:outline-none focus:border-aurora-purple/50 focus:ring-1 focus:ring-aurora-purple/50 transition-all duration-300;
+  .glass-card:hover {
+    @apply shadow-glass-hover bg-background-panel/95 border-white/15;
+  }
+
+  .console-panel {
+    @apply bg-background-panel2/90 border border-white/10 shadow-[0_20px_90px_rgba(0, 0, 0, 0.35)] rounded-[2rem] backdrop-blur-2xl;
+  }
+
+  @media (max-width: 640px) {
+    .console-panel {
+      border-radius: 1rem;
+      padding: 1rem;
+    }
+
+    .glass-card {
+      border-radius: 1rem;
+    }
+  }
+
+  .soft-glow {
+    box-shadow: 0 0 40px rgba(45, 212, 191, 0.22);
+  }
+
+  .pulse-heartbeat {
+    animation: pulseHeartbeat 2.8s infinite ease-in-out;
+  }
+
+  @keyframes pulseHeartbeat {
+
+    0%,
+    100% {
+      transform: scale(1);
+    }
+
+    40% {
+      transform: scale(1.01);
+    }
+
+    50% {
+      transform: scale(1.02);
+    }
+
+    60% {
+      transform: scale(1.01);
+    }
   }
 }

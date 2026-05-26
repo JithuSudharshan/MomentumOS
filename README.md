@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # MomentumOS 🚀  
 
 [![MIT License](https://img.shields.io/badge/License-MIT-teal.svg)](https://opensource.org/licenses/MIT)
@@ -80,3 +81,42 @@ MomentumOS is an AI-driven life operating system focused on cognitive recovery, 
 npm install
    # If client/server are decoupled:
    # cd client && npm install && cd ../server && npm install
+=======
+# MomentumOS — Local Development
+
+This repository contains a client (Vite + React + Tailwind) and a server (Express + MongoDB + Mongoose).
+
+Quick start (development):
+
+1. Copy server environment variables
+
+```bash
+cp server/.env.example server/.env
+# edit server/.env and set MONGO_URI and (optionally) GEMINI_API_KEY
+```
+
+2. Start the server
+
+```bash
+cd server
+npm install
+npm run dev
+```
+
+3. Start the client
+
+```bash
+cd client
+npm install
+# optional: set API base url in client/.env (VITE_API_URL), otherwise defaults to http://localhost:5000
+npm run dev
+```
+
+Behavior
+
+- The server connects to MongoDB using `MONGO_URI` in `server/.env`.
+- The client reads `VITE_API_URL` (optional) to point API calls at the server.
+- Tasks created or completed via the client hit the server endpoints and persist to MongoDB.
+
+If you want the brain-dump AI pipeline, set `GEMINI_API_KEY` in `server/.env`.
+>>>>>>> 1cdac8f (feat(ui): complete end-to-end overhaul to 'Relentless Vanguard' RPG theme)

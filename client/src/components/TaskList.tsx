@@ -1,122 +1,174 @@
-import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Circle, ShieldAlert, Sparkles, Wind } from 'lucide-react';
+import { Circle, Wind, Sparkles, Flame } from 'lucide-react';
 import { useStore, Task } from '../store/useStore';
-import clsx from 'clsx';
 
 const EnergyGlow = ({ level }: { level: Task['energyRequired'] }) => {
   switch (level) {
-    case 'low': return <div className="w-2 h-2 rounded-full bg-aurora-green shadow-[0_0_8px_#34D399]" />;
-    case 'medium': return <div className="w-2 h-2 rounded-full bg-aurora-cyan shadow-[0_0_8px_#22D3EE]" />;
-    case 'high': return <div className="w-2 h-2 rounded-full bg-aurora-orange shadow-[0_0_8px_#FDBA74]" />;
+    case 'low': return <div className="w-2 h-2 rounded-full bg-vanguard-verdant shadow-[0_0_8px_#4ADE80]" />;
+    case 'medium': return <div className="w-2 h-2 rounded-full bg-vanguard-teal shadow-[0_0_8px_#2DD4BF]" />;
+    case 'high': return <div className="w-2 h-2 rounded-full bg-vanguard-ice shadow-[0_0_8px_#A78BFA]" />;
   }
 };
 
 export const TaskList = () => {
-  const tasks = useStore((state) => state.tasks.filter(t => t.status !== 'completed'));
+  const allTasks = useStore((state) => state.tasks);
+  const regularTasks = allTasks.filter(t => t.status !== 'completed' && !t.isMicroStep);
+  const recoveryTasks = allTasks.filter(t => t.status === 'recovering' && t.isMicroStep);
+
   const completeTask = useStore((state) => state.completeTask);
   const failTask = useStore((state) => state.failTask);
   const recoverTask = useStore((state) => state.recoverTask);
 
-  if (tasks.length === 0) {
+  const tasks = regularTasks;
+  const hasRecovery = recoveryTasks.length > 0;
+
+  if (tasks.length === 0 && !hasRecovery) {
     return (
       <motion.div
         initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-        className="text-center p-16 glass-card"
+        className="text-center p-16 console-panel"
       >
         <div className="flex justify-center mb-4">
-          <Sparkles className="w-8 h-8 text-aurora-cyan opacity-50" />
+          <Sparkles className="w-10 h-10 text-vanguard-teal opacity-70" />
         </div>
-        <h3 className="text-xl font-light text-white/80 mb-2 tracking-wide">Sanctuary Clear</h3>
-        <p className="text-slate-400 font-light">You have recovered your momentum. Rest now.</p>
+        <h3 className="text-2xl font-semibold text-white/90 mb-3 tracking-tight">Sanctuary Clear</h3>
+        <p className="text-slate-400 font-light">Your field is stable. Rest easy — your recovery systems are online.</p>
       </motion.div>
     );
   }
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center gap-3 px-2">
-        <h3 className="text-sm font-light text-slate-400 tracking-[0.2em] uppercase">Active Nodes</h3>
-        <div className="h-[1px] flex-1 bg-gradient-to-r from-white/10 to-transparent" />
-      </div>
-
-      <AnimatePresence>
-        {tasks.map((task) => (
-          <motion.div
-            key={task.id}
-            layout
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{
-              opacity: 0,
-              scale: 1.05,
-              filter: "blur(10px)",
-              transition: { duration: 0.4, ease: "easeOut" }
-            }}
-            className={clsx(
-              "glass-card p-6 flex items-center justify-between group relative overflow-hidden transition-all duration-500",
-              task.status === 'recovering' ? "shadow-[inset_0_0_40px_rgba(253,186,116,0.15)] border-aurora-orange/40" : "border-white/5"
-            )}
-          >
-            {/* Hover Glow Effect inside card */}
-            <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/5 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000 ease-in-out pointer-events-none" />
-
-            {/* Intense Recovery Pulse */}
-            {task.status === 'recovering' && (
-              <div className="absolute inset-0 bg-aurora-orange/5 animate-pulse pointer-events-none" />
-            )}
-
-            <div className="flex items-center gap-5 relative z-10">
-              <button
-                onClick={() => task.status === 'recovering' ? recoverTask(task.id) : completeTask(task.id)}
-                className="relative text-white/20 hover:text-white/80 transition-colors focus:outline-none"
-              >
-                {task.status === 'recovering' ? (
-                  <ShieldAlert className="w-7 h-7 text-aurora-orange animate-pulse" />
-                ) : (
-                  <Circle className="w-7 h-7" />
-                )}
-                {/* Glow behind checkmark on hover */}
-                <div className="absolute inset-0 bg-aurora-cyan/40 blur-md rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
-              </button>
-
-              <div>
-                <h4 className={clsx(
-                  "font-medium text-lg tracking-wide mb-1.5",
-                  task.status === 'recovering' ? "text-aurora-orange" : "text-white/90"
-                )}>
-                  {task.title}
-                </h4>
-                <div className="flex items-center gap-4 text-xs font-light text-slate-400">
-                  <span className="bg-white/5 border border-white/10 px-2.5 py-1 rounded-md tracking-wider">
-                    {task.category}
-                  </span>
-                  <span className="flex items-center gap-2">
-                    <EnergyGlow level={task.energyRequired} />
-                    <span className="capitalize tracking-wider">{task.energyRequired} Energy</span>
-                  </span>
-                  <span className="text-aurora-purple font-medium tracking-wider">+{task.xpReward} XP</span>
-                </div>
-              </div>
+      {/* Recovery Tasks (Phoenix Quest) */}
+      {hasRecovery && (
+        <div className="space-y-4">
+          <div className="flex items-center gap-3 px-2">
+            <div className="flex items-center gap-2">
+              <Flame className="w-4 h-4 text-vanguard-ember animate-pulse" />
+              <h3 className="text-sm font-light text-vanguard-ember tracking-[0.2em] uppercase">Phoenix Quests</h3>
             </div>
+            <div className="h-[1px] flex-1 bg-gradient-to-r from-vanguard-ember/30 to-transparent" />
+          </div>
 
-            {task.status === 'recovering' ? (
-              <div className="relative z-10 flex items-center gap-2 text-[10px] sm:text-xs text-aurora-orange bg-aurora-orange/10 border border-aurora-orange/30 px-4 py-1.5 rounded-full tracking-widest uppercase shadow-[0_0_15px_rgba(253,186,116,0.2)]">
-                <ShieldAlert className="w-3 h-3 sm:w-4 sm:h-4 animate-pulse" />
-                Urgent: Momentum Breached
-              </div>
-            ) : (
-              <button
-                onClick={() => failTask(task.id)}
-                className="relative z-10 opacity-0 group-hover:opacity-100 p-2 text-slate-500 hover:text-aurora-orange transition-all focus:outline-none"
-                title="Shatter Task"
+          <AnimatePresence>
+            {recoveryTasks.map((task) => (
+              <motion.div
+                key={task.id}
+                layout
+                initial={{ opacity: 0, y: 24, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -10, scale: 0.96, transition: { duration: 0.35 } }}
+                className="glass-card p-6 flex flex-col gap-4 overflow-hidden border-2 border-vanguard-ember/30 bg-gradient-to-br from-vanguard-ember/5 to-vanguard-breach/5 relative"
               >
-                <Wind className="w-5 h-5" />
-              </button>
-            )}
-          </motion.div>
-        ))}
-      </AnimatePresence>
+                {/* Animated glow background */}
+                <motion.div
+                  animate={{ opacity: [0.3, 0.5, 0.3] }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                  className="pointer-events-none absolute inset-0 bg-gradient-to-br from-vanguard-ember/10 via-transparent to-transparent mix-blend-screen"
+                />
+
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between relative z-10">
+                  <div className="flex items-center gap-4">
+                    <motion.button
+                      onClick={() => recoverTask(task.id)}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="relative flex h-12 w-12 items-center justify-center rounded-3xl border-2 border-vanguard-ember text-vanguard-ember bg-vanguard-ember/10 hover:bg-vanguard-ember/20 transition-all"
+                    >
+                      <motion.div animate={{ y: [0, -2, 0], rotate: [0, 5, -5, 0] }} transition={{ duration: 2, repeat: Infinity }}>
+                        <Flame className="w-6 h-6" />
+                      </motion.div>
+                    </motion.button>
+
+                    <div>
+                      <h4 className="text-xl font-semibold tracking-tight text-vanguard-ember">
+                        {task.title}
+                      </h4>
+                      <div className="flex flex-wrap items-center gap-3 text-xs font-light text-slate-400 mt-2">
+                        <span className="rounded-full border border-vanguard-ember/20 bg-vanguard-ember/5 px-3 py-1 uppercase tracking-[0.25em]">{task.category}</span>
+                        <span className="flex items-center gap-2">
+                          <EnergyGlow level={task.energyRequired} />
+                          <span className="capitalize">{task.energyRequired} energy</span>
+                        </span>
+                        <span className="font-semibold text-vanguard-teal">+{task.xpReward} XP</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-3 text-right sm:text-left sm:flex-row sm:items-center">
+                    <div className="rounded-full border border-vanguard-ember/30 bg-vanguard-ember/10 px-4 py-2 text-[11px] uppercase tracking-[0.3em] text-vanguard-ember shadow-[0_0_20px_rgba(239,68,68,0.08)]">
+                      Recovery in progress
+                    </div>
+                  </div>
+                </div>
+
+                <div className="relative rounded-2xl border border-vanguard-ember/20 bg-vanguard-ember/5 p-4 text-sm text-vanguard-ember/90">
+                  <p className="font-medium">Shield restoration active</p>
+                  <p className="mt-2 text-vanguard-ember/70 text-xs leading-relaxed">Complete this recovery quest to rebuild your momentum and restore your protective barrier. No judgment—just progress.</p>
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </div>
+      )}
+
+      {/* Regular Tasks */}
+      {tasks.length > 0 && (
+        <div className="space-y-4">
+          <div className="flex items-center gap-3 px-2">
+            <h3 className="text-sm font-light text-slate-400 tracking-[0.2em] uppercase">Active Nodes</h3>
+            <div className="h-[1px] flex-1 bg-gradient-to-r from-white/10 to-transparent" />
+          </div>
+
+          <AnimatePresence>
+            {tasks.map((task) => (
+              <motion.div
+                key={task.id}
+                layout
+                initial={{ opacity: 0, y: 24, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -10, scale: 0.96, transition: { duration: 0.35 } }}
+                className="glass-card p-6 flex flex-col gap-4 overflow-hidden border border-white/10 relative"
+              >
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between relative z-10">
+                  <div className="flex items-center gap-4">
+                    <button
+                      onClick={() => completeTask(task.id)}
+                      className="relative flex h-12 w-12 items-center justify-center rounded-3xl border border-white/10 bg-white/5 text-slate-200 hover:bg-vanguard-teal/10 hover:text-white hover:border-vanguard-teal/30 transition-all"
+                    >
+                      <Circle className="w-6 h-6" />
+                    </button>
+
+                    <div>
+                      <h4 className="text-xl font-semibold tracking-tight text-white">
+                        {task.title}
+                      </h4>
+                      <div className="flex flex-wrap items-center gap-3 text-xs font-light text-slate-400 mt-2">
+                        <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 uppercase tracking-[0.25em]">{task.category}</span>
+                        <span className="flex items-center gap-2">
+                          <EnergyGlow level={task.energyRequired} />
+                          <span className="capitalize">{task.energyRequired} energy</span>
+                        </span>
+                        <span className="font-semibold text-vanguard-ice">+{task.xpReward} XP</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col gap-3 text-right sm:text-left sm:flex-row sm:items-center sm:justify-end">
+                    <button
+                      onClick={() => failTask(task.id)}
+                      className="inline-flex items-center gap-2 rounded-3xl border border-white/10 bg-white/5 px-4 py-2 text-xs uppercase tracking-[0.3em] text-slate-300 transition hover:bg-vanguard-breach/10 hover:text-vanguard-breach hover:border-vanguard-breach/30"
+                    >
+                      <Wind className="w-4 h-4" />
+                      Defer & Recover
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </div>
+      )}
     </div>
   );
 };

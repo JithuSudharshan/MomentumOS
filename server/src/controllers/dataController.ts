@@ -11,13 +11,30 @@ const getUser = async () => {
   return user;
 };
 
+// Helper to generate recovery micro-step
+const generateMicroStep = (task: any): Partial<any> => {
+  const energyMap = { high: 'medium', medium: 'low', low: 'low' };
+  const xpMap = { 50: 15, 30: 10, 25: 8, 20: 5, 15: 5, 10: 3 };
+
+  return {
+    title: `${task.title.split('?')[0]} (micro-step)`,
+    category: task.category,
+    energyRequired: energyMap[task.energyRequired as keyof typeof energyMap] || 'low',
+    xpReward: (xpMap as any)[task.xpReward] || Math.max(5, Math.floor(task.xpReward / 3)),
+    status: 'recovering',
+    isMicroStep: true,
+    recoveryOf: task._id,
+  };
+};
+
 export const fetchInitialData = async (req: Request, res: Response) => {
   try {
     const user = await getUser();
-    const tasks = await Task.find({ status: { $ne: 'completed' } }).sort({ createdAt: -1 });
-    
+    const tasks = await Task.find({ status: { $ne: 'completed' }, isMicroStep: { $ne: true } }).sort({ createdAt: -1 });
+    const recoveringTasks = await Task.find({ status: 'recovering', isMicroStep: true }).sort({ createdAt: -1 });
+
     // Map _id to id for the frontend
-    const mappedTasks = tasks.map(t => {
+    const mappedTasks = [...tasks, ...recoveringTasks].map(t => {
       const taskObj = t.toObject();
       return { ...taskObj, id: taskObj._id.toString() };
     });
@@ -49,7 +66,7 @@ export const completeTask = async (req: Request, res: Response) => {
 
     const user = await getUser();
     user.xp += task.xpReward;
-    
+
     // Level up logic (every 1000 XP)
     if (user.xp >= user.level * 1000) {
       user.level += 1;
@@ -72,14 +89,25 @@ export const completeTask = async (req: Request, res: Response) => {
 export const failTask = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const task = await Task.findByIdAndUpdate(id, { status: 'recovering' }, { new: true });
-    
+    const task = await Task.findById(id);
+    if (!task) return res.status(404).json({ error: 'Task not found' });
+
+    task.status = 'failed';
+    await task.save();
+
+    // Generate recovery micro-step
+    const microStep = await Task.create(generateMicroStep(task));
+
     const user = await getUser();
     user.shieldActive = false;
     user.streak = 0;
     await user.save();
 
-    res.json({ task: { ...task?.toObject(), id: task?._id?.toString() }, stats: user });
+    res.json({
+      task: { ...task.toObject(), id: task._id.toString() },
+      microStep: { ...microStep.toObject(), id: microStep._id.toString() },
+      stats: user
+    });
   } catch (error) {
     res.status(500).json({ error: 'Failed to fail task' });
   }
@@ -88,14 +116,39 @@ export const failTask = async (req: Request, res: Response) => {
 export const recoverTask = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const task = await Task.findByIdAndUpdate(id, { status: 'completed' }, { new: true });
-    
+    const microStepTask = await Task.findById(id);
+    if (!microStepTask) return res.status(404).json({ error: 'Task not found' });
+
+    microStepTask.status = 'completed';
+    await microStepTask.save();
+
+    // Mark the original failed task as recovered
+    if (microStepTask.recoveryOf) {
+      const originalTask = await Task.findById(microStepTask.recoveryOf);
+      if (originalTask) {
+        originalTask.status = 'completed';
+        await originalTask.save();
+      }
+    }
+
     const user = await getUser();
     user.shieldActive = true;
     user.streak += 1;
+
+    // Award bonus XP for recovery
+    user.xp += Math.max(5, Math.floor(microStepTask.xpReward * 0.5));
+
+    const categoryStr = microStepTask.category.toLowerCase();
+    if (categoryStr.includes('intellect') || categoryStr.includes('work') || categoryStr.includes('learning')) user.intellect += microStepTask.xpReward;
+    else if (categoryStr.includes('vitality') || categoryStr.includes('health')) user.vitality += microStepTask.xpReward;
+    else user.creativity += microStepTask.xpReward;
+
     await user.save();
 
-    res.json({ task: { ...task?.toObject(), id: task?._id?.toString() }, stats: user });
+    res.json({
+      task: { ...microStepTask.toObject(), id: microStepTask._id.toString() },
+      stats: user
+    });
   } catch (error) {
     res.status(500).json({ error: 'Failed to recover task' });
   }

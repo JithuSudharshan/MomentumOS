@@ -10,6 +10,9 @@ export interface Task {
   energyRequired: EnergyLevel;
   status: TaskStatus;
   xpReward: number;
+  isMicroStep?: boolean;
+  recoveryOf?: string;
+  description?: string;
 }
 
 export interface UserStats {
@@ -40,23 +43,23 @@ export const useStore = create<AppState>((set) => ({
     { id: '1', title: 'Finish Math Assignment', category: 'Intellect', energyRequired: 'high', status: 'pending', xpReward: 50 },
     { id: '2', title: 'Do Laundry', category: 'Vitality', energyRequired: 'low', status: 'pending', xpReward: 10 },
     { id: '3', title: 'Drink Water', category: 'Vitality', energyRequired: 'low', status: 'pending', xpReward: 5 },
-    { id: '4', title: 'Missed Workout', category: 'Vitality', energyRequired: 'medium', status: 'recovering', xpReward: 20 },
   ],
   stats: {
     level: 5,
     xp: 450,
     streak: 12,
-    shieldActive: false, // Shield broke when a task was missed
+    shieldActive: true,
     intellect: 120,
     vitality: 80,
     creativity: 40,
   },
   isOverwhelmed: false,
   setOverwhelmed: (val) => set({ isOverwhelmed: val }),
-  
+
   addTask: async (task) => {
     try {
-      const response = await fetch('http://localhost:5000/api/data/tasks', {
+      const base = (import.meta as any).env.VITE_API_URL || 'http://localhost:5000';
+      const response = await fetch(`${base}/api/data/tasks`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...task, status: 'pending' })
@@ -71,9 +74,10 @@ export const useStore = create<AppState>((set) => ({
   },
   completeTask: async (id) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/data/tasks/${id}/complete`, { method: 'PATCH' });
+      const base = (import.meta as any).env.VITE_API_URL || 'http://localhost:5000';
+      const res = await fetch(`${base}/api/data/tasks/${id}/complete`, { method: 'PATCH' });
       if (res.ok) {
-        const { task, stats } = await res.json();
+        const { stats } = await res.json();
         set((state) => ({
           tasks: state.tasks.map(t => t.id === id ? { ...t, status: 'completed' } : t),
           stats: stats
@@ -86,9 +90,10 @@ export const useStore = create<AppState>((set) => ({
 
   failTask: async (id) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/data/tasks/${id}/fail`, { method: 'PATCH' });
+      const base = (import.meta as any).env.VITE_API_URL || 'http://localhost:5000';
+      const res = await fetch(`${base}/api/data/tasks/${id}/fail`, { method: 'PATCH' });
       if (res.ok) {
-        const { task, stats } = await res.json();
+        const { stats } = await res.json();
         set((state) => ({
           tasks: state.tasks.map(t => t.id === id ? { ...t, status: 'recovering' } : t),
           stats: stats
@@ -101,9 +106,10 @@ export const useStore = create<AppState>((set) => ({
 
   recoverTask: async (id) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/data/tasks/${id}/recover`, { method: 'PATCH' });
+      const base = (import.meta as any).env.VITE_API_URL || 'http://localhost:5000';
+      const res = await fetch(`${base}/api/data/tasks/${id}/recover`, { method: 'PATCH' });
       if (res.ok) {
-        const { task, stats } = await res.json();
+        const { stats } = await res.json();
         set((state) => ({
           tasks: state.tasks.map(t => t.id === id ? { ...t, status: 'completed' } : t),
           stats: stats
@@ -116,14 +122,15 @@ export const useStore = create<AppState>((set) => ({
 
   addBrainDump: async (text) => {
     try {
-      const response = await fetch('http://localhost:5000/api/braindump', {
+      const base = (import.meta as any).env.VITE_API_URL || 'http://localhost:5000';
+      const response = await fetch(`${base}/api/braindump`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text })
       });
-      
+
       if (!response.ok) throw new Error('Failed to parse brain dump');
-      
+
       const data = await response.json();
       set((state) => ({ tasks: [...data.tasks, ...state.tasks] })); // Put new tasks at the top
     } catch (error) {
@@ -134,7 +141,8 @@ export const useStore = create<AppState>((set) => ({
 
   initializeStore: async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/data');
+      const base = (import.meta as any).env.VITE_API_URL || 'http://localhost:5000';
+      const response = await fetch(`${base}/api/data`);
       if (response.ok) {
         const data = await response.json();
         set({ tasks: data.tasks, stats: data.stats });

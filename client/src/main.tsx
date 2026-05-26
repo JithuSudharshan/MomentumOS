@@ -8,3 +8,12 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <App />
   </React.StrictMode>,
 )
+
+// Register service worker in production for PWA
+if ('serviceWorker' in navigator) {
+  if (import.meta.env.PROD) {
+    navigator.serviceWorker.register('/sw.js').catch(() => {
+      // silent fail - registration not critical for dev
+    });
+  }
+}
