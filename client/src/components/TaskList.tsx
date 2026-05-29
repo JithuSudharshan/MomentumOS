@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Circle, Wind, Sparkles, Flame, Pause, X, Loader2 } from 'lucide-react';
 import { useStore, Task } from '../store/useStore';
+import { StardustOverlay } from './StardustOverlay';
 
 const EnergyGlow = ({ level }: { level: Task['energyRequired'] }) => {
   switch (level) {
@@ -22,6 +23,7 @@ export const TaskList = () => {
 
   const [pausingTaskId, setPausingTaskId] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [burst, setBurst] = useState<{id: number, x: number, y: number} | null>(null);
 
   const handlePause = async (taskId: string, reason: string) => {
     setIsProcessing(true);
@@ -81,10 +83,13 @@ export const TaskList = () => {
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between relative z-10">
                   <div className="flex items-center gap-4">
                     <motion.button
-                      onClick={() => recoverTask(task.id)}
+                      onClick={(e) => {
+                        setBurst({ id: Date.now(), x: e.clientX, y: e.clientY });
+                        recoverTask(task.id);
+                      }}
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.95 }}
-                      className="relative flex h-12 w-12 items-center justify-center rounded-3xl border-2 border-vanguard-ember text-vanguard-ember bg-vanguard-ember/10 hover:bg-vanguard-ember/20 transition-all"
+                      className="relative flex h-12 w-12 items-center justify-center rounded-3xl border-2 border-vanguard-ember text-vanguard-ember bg-vanguard-ember/10 hover:bg-vanguard-ember/20 hover:shadow-[0_0_25px_rgba(239,68,68,0.5)] transition-all duration-300"
                     >
                       <motion.div animate={{ y: [0, -2, 0], rotate: [0, 5, -5, 0] }} transition={{ duration: 2, repeat: Infinity }}>
                         <Flame className="w-6 h-6" />
@@ -175,10 +180,13 @@ export const TaskList = () => {
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between relative z-10">
                   <div className="flex items-center gap-4">
                     <button
-                      onClick={() => completeTask(task.id)}
-                      className="relative flex h-12 w-12 items-center justify-center rounded-3xl border border-white/10 bg-white/5 text-slate-200 hover:bg-vanguard-teal/10 hover:text-white hover:border-vanguard-teal/30 transition-all"
+                      onClick={(e) => {
+                        setBurst({ id: Date.now(), x: e.clientX, y: e.clientY });
+                        completeTask(task.id);
+                      }}
+                      className="relative flex h-12 w-12 items-center justify-center rounded-3xl border border-white/10 bg-white/5 text-slate-200 hover:bg-vanguard-teal/10 hover:text-vanguard-teal hover:border-vanguard-teal/50 hover:shadow-[0_0_20px_rgba(45,212,191,0.5)] transition-all duration-300 group"
                     >
-                      <Circle className="w-6 h-6" />
+                      <Circle className="w-6 h-6 group-hover:scale-110 transition-transform duration-300" />
                     </button>
 
                     <div>
@@ -210,6 +218,15 @@ export const TaskList = () => {
             ))}
           </AnimatePresence>
         </div>
+      )}
+
+      {burst && (
+        <StardustOverlay 
+          key={burst.id}
+          x={burst.x} 
+          y={burst.y} 
+          onComplete={() => setBurst(null)} 
+        />
       )}
     </div>
   );

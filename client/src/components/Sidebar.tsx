@@ -1,15 +1,27 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Shield, ShieldAlert, Zap, Brain, Flame, Activity, Sparkles, Key, Wand } from 'lucide-react';
+import { Shield, ShieldAlert, Zap, Brain, Flame, Activity, Sparkles, Key, Wand, Award } from 'lucide-react';
 import { useStore } from '../store/useStore';
+import { BADGES } from './PersonalGrowthArchive';
 import clsx from 'clsx';
 
-export const Sidebar = () => {
+const getOSTitle = (level: number) => {
+  if (level === 1) return 'Explorer';
+  if (level === 2) return 'Navigator';
+  if (level === 3) return 'Architect';
+  if (level === 4) return 'Operator';
+  if (level === 5) return 'Commander';
+  return 'Momentum Master';
+};
+
+export const Sidebar = ({ onOpenArchive }: { onOpenArchive?: () => void }) => {
   const stats = useStore((state) => state.stats);
   const [xpDiff, setXpDiff] = React.useState(0);
   const [isSparking, setIsSparking] = React.useState(false);
   const prevXpRef = React.useRef(stats.xp);
   const isInitialMount = React.useRef(true);
+
+  const hasUnclaimedEligible = BADGES.some(b => b.checkUnlocked(stats) && !stats.claimedBadges?.includes(b.id));
 
   React.useEffect(() => {
     const timer = setTimeout(() => {
@@ -41,7 +53,7 @@ export const Sidebar = () => {
           <h2 className="text-4xl font-semibold tracking-tight text-white">
             Level <span className="text-vanguard-ice">{stats.level}</span>
           </h2>
-          <p className="text-sm uppercase tracking-[0.35em] text-slate-400 mt-2">Momentum Master</p>
+          <p className="text-sm uppercase tracking-[0.35em] text-slate-400 mt-2">{getOSTitle(stats.level)}</p>
         </div>
         <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-white/5 border border-white/10 shadow-[0_0_30px_rgba(167,139,250,0.18)]">
           <div className="h-10 w-10 rounded-full bg-gradient-to-br from-vanguard-ice to-vanguard-teal shadow-orb" />
@@ -144,32 +156,43 @@ export const Sidebar = () => {
 
       <div className="rounded-[2rem] border border-white/10 bg-[#181E27]/90 p-6">
         <div className="flex items-center justify-between mb-5 text-xs uppercase tracking-[0.35em] text-slate-400">
-          <span>Inventory & Quests</span>
-          <span className="text-slate-500">Equipped</span>
+          <span>Recent Achievements</span>
         </div>
         <div className="grid gap-4">
-          <div className="flex items-center gap-3 rounded-3xl border border-white/10 bg-white/5 p-4 text-slate-200">
-            <Sparkles className="w-5 h-5 text-vanguard-ice" />
-            <div>
-              <p className="text-sm font-semibold">Grace Rune</p>
-              <p className="text-xs text-slate-500">Equipped</p>
+          {BADGES.filter(b => stats.claimedBadges?.includes(b.id)).slice(0, 3).map(badge => {
+            const Icon = badge.icon;
+            return (
+              <div key={badge.id} className="flex items-center gap-4 rounded-3xl border border-white/10 bg-white/5 p-4 text-slate-200 hover:bg-white/10 transition-colors">
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 bg-${badge.color}/20 text-${badge.color}`}>
+                  <Icon className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold tracking-wide">{badge.title}</p>
+                  <p className="text-[10px] uppercase tracking-widest text-slate-500">Unlocked</p>
+                </div>
+              </div>
+            );
+          })}
+          
+          {BADGES.filter(b => stats.claimedBadges?.includes(b.id)).length === 0 && (
+            <div className="text-center py-6 text-slate-500 text-sm italic">
+              Your journey begins here.
             </div>
-          </div>
-          <div className="flex items-center gap-3 rounded-3xl border border-white/10 bg-white/5 p-4 text-slate-200">
-            <Wand className="w-5 h-5 text-vanguard-teal" />
-            <div>
-              <p className="text-sm font-semibold">Resolve Catalyst</p>
-              <p className="text-xs text-slate-500">Ready</p>
-            </div>
-          </div>
-          <div className="flex items-center gap-3 rounded-3xl border border-white/10 bg-white/5 p-4 text-slate-200">
-            <Key className="w-5 h-5 text-vanguard-ember" />
-            <div>
-              <p className="text-sm font-semibold">Phoenix Key</p>
-              <p className="text-xs text-slate-500">Quest slot</p>
-            </div>
-          </div>
+          )}
         </div>
+
+        <button 
+          onClick={onOpenArchive} 
+          className={clsx(
+            "mt-6 w-full py-4 rounded-xl border text-[11px] font-semibold uppercase tracking-[0.3em] transition-all duration-500 group flex items-center justify-center gap-3",
+            hasUnclaimedEligible 
+              ? "bg-[#FDE047] text-black border-[#FDE047] shadow-[0_0_20px_rgba(253,224,71,0.6)] animate-pulse hover:bg-white hover:border-white" 
+              : "border-vanguard-teal/30 bg-vanguard-teal/10 shadow-[0_0_15px_rgba(45,212,191,0.1)] hover:bg-[#FDE047]/15 hover:border-[#FDE047]/50 hover:shadow-[0_0_25px_rgba(253,224,71,0.2)] text-vanguard-teal hover:text-[#FDE047]"
+          )}
+        >
+          <Award className={clsx("w-4 h-4 group-hover:scale-110 transition-transform duration-500", hasUnclaimedEligible ? "text-black" : "text-vanguard-teal group-hover:text-[#FDE047]")} />
+          {hasUnclaimedEligible ? "Claim New Badges!" : "Personal Growth Archive"}
+        </button>
       </div>
     </motion.div>
   );

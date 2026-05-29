@@ -1,4 +1,5 @@
-import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Eye } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { BrainDump } from '../components/BrainDump';
@@ -6,9 +7,12 @@ import { QuickAdd } from '../components/QuickAdd';
 import { TaskList } from '../components/TaskList';
 import { Sidebar } from '../components/Sidebar';
 import { AIOrb } from '../components/AIOrb';
+import { PersonalGrowthArchive } from '../components/PersonalGrowthArchive';
+import { BadgeCelebrationManager } from '../components/BadgeCelebrationManager';
 
 export const Dashboard = () => {
   const navigate = useNavigate();
+  const [isArchiveOpen, setIsArchiveOpen] = useState(false);
 
   return (
     <div className="min-h-screen text-slate-50 relative z-10">
@@ -54,10 +58,18 @@ export const Dashboard = () => {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="lg:col-span-5"
           >
-            <Sidebar />
+            <Sidebar onOpenArchive={() => setIsArchiveOpen(true)} />
           </motion.div>
         </div>
       </div>
+
+      <AnimatePresence>
+        {isArchiveOpen && (
+          <PersonalGrowthArchive onClose={() => setIsArchiveOpen(false)} />
+        )}
+      </AnimatePresence>
+
+      <BadgeCelebrationManager />
     </div>
   );
 };

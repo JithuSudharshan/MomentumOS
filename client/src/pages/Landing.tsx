@@ -37,7 +37,7 @@ export const Landing: React.FC = () => {
             </motion.h1>
 
             <motion.p initial={{ y: 12, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.12, duration: 0.9 }} className="mt-6 text-lg text-slate-300 max-w-2xl font-light leading-relaxed">
-              Traditional task managers assume you operate at 100% capacity all the time. MomentumOS is different. Powered by Gemini AI, it adapts to your mental state, simplifies overwhelming tasks, and turns your productivity into a guilt-free, gamified experience.
+              Traditional task managers assume you operate at 100% capacity all the time. MomentumOS is different. Powered by AI, it adapts to your mental state, simplifies overwhelming tasks, and turns your productivity into a guilt-free, gamified experience.
             </motion.p>
 
             <div className="mt-8 flex flex-col sm:flex-row gap-4">
@@ -54,11 +54,11 @@ export const Landing: React.FC = () => {
             {/* Ambient background glows */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(45,212,191,0.1),transparent_50%)]" />
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-125">
-               <AIOrb />
+              <AIOrb />
             </div>
 
             {/* Floating Glass Cards representing features */}
-            <motion.div 
+            <motion.div
               animate={{ y: [-10, 10, -10] }}
               transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
               className="absolute top-[10%] left-0 w-64 glass-card p-4 border border-white/10 bg-white/5 shadow-2xl backdrop-blur-xl rounded-2xl"
@@ -70,7 +70,7 @@ export const Landing: React.FC = () => {
               <p className="text-sm text-white font-medium">Synthesizing audio into structured tasks...</p>
             </motion.div>
 
-            <motion.div 
+            <motion.div
               animate={{ y: [10, -10, 10] }}
               transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
               className="absolute top-[45%] -right-[10%] md:-right-[5%] w-72 glass-card p-4 border border-vanguard-ember/30 bg-vanguard-ember/10 shadow-[0_0_30px_rgba(239,68,68,0.15)] backdrop-blur-xl rounded-2xl"
@@ -83,7 +83,7 @@ export const Landing: React.FC = () => {
               <div className="mt-2 text-xs text-vanguard-teal">+50 XP</div>
             </motion.div>
 
-            <motion.div 
+            <motion.div
               animate={{ y: [-5, 5, -5] }}
               transition={{ duration: 3.5, repeat: Infinity, ease: "easeInOut" }}
               className="absolute bottom-[10%] left-[10%] w-60 glass-card p-4 border border-vanguard-verdant/30 bg-vanguard-verdant/10 shadow-[0_0_30px_rgba(74,222,128,0.1)] backdrop-blur-xl rounded-2xl flex items-center gap-4"

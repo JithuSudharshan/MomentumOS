@@ -23,6 +23,15 @@ export interface UserStats {
   intellect: number;
   vitality: number;
   creativity: number;
+  brainDumpsCompleted: number;
+  tasksExtracted: number;
+  actionPlansCompleted: number;
+  emotionalReflections: number;
+  recoveryStepsCompleted: number;
+  lastActiveDate: string;
+  activeDaysCount: number;
+  hasBouncedBack: boolean;
+  claimedBadges: string[];
 }
 
 export interface BrainDumpResponse {
@@ -49,6 +58,9 @@ interface AppState {
   recoverTask: (id: string) => void;
   addBrainDump: (text: string) => Promise<BrainDumpResponse | void>;
   initializeStore: () => Promise<void>;
+  claimBadge: (id: string) => Promise<void>;
+  activeCelebration: any | null;
+  triggerCelebration: (badge: any | null) => void;
 }
 
 export const useStore = create<AppState>((set) => ({
@@ -65,9 +77,20 @@ export const useStore = create<AppState>((set) => ({
     intellect: 120,
     vitality: 80,
     creativity: 40,
+    brainDumpsCompleted: 0,
+    tasksExtracted: 0,
+    actionPlansCompleted: 0,
+    emotionalReflections: 0,
+    recoveryStepsCompleted: 0,
+    lastActiveDate: new Date().toISOString(),
+    activeDaysCount: 1,
+    hasBouncedBack: false,
+    claimedBadges: [],
   },
   isOverwhelmed: false,
   setOverwhelmed: (val) => set({ isOverwhelmed: val }),
+  activeCelebration: null,
+  triggerCelebration: (badge) => set({ activeCelebration: badge }),
 
   addTask: async (task) => {
     try {
@@ -149,7 +172,10 @@ export const useStore = create<AppState>((set) => ({
       if (!response.ok) throw new Error('Failed to parse brain dump');
 
       const data = await response.json();
-      set((state) => ({ tasks: [...data.tasks, ...state.tasks] })); // Put new tasks at the top
+      set((state) => ({ 
+        tasks: [...data.tasks, ...state.tasks],
+        stats: data.stats || state.stats
+      })); 
       return data;
     } catch (error) {
       console.error(error);
@@ -167,6 +193,19 @@ export const useStore = create<AppState>((set) => ({
       }
     } catch (error) {
       console.error('Failed to initialize store from MongoDB', error);
+    }
+  },
+
+  claimBadge: async (id) => {
+    try {
+      const base = (import.meta as any).env.VITE_API_URL || 'http://localhost:5000';
+      const response = await fetch(`${base}/api/data/badges/${id}/claim`, { method: 'POST' });
+      if (response.ok) {
+        const { stats } = await response.json();
+        set({ stats });
+      }
+    } catch (error) {
+      console.error('Failed to claim badge', error);
     }
   }
 }));

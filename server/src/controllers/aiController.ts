@@ -2,11 +2,20 @@ import { Request, Response } from 'express';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import dotenv from 'dotenv';
 import Task from '../models/Task';
+import User from '../models/User';
 
 dotenv.config();
 
 const apiKey = process.env.GEMINI_API_KEY || '';
 const genAI = new GoogleGenerativeAI(apiKey);
+
+const getUser = async () => {
+  let user = await User.findOne();
+  if (!user) {
+    user = await User.create({});
+  }
+  return user;
+};
 
 export const generateTasksFromDump = async (req: Request, res: Response) => {
   try {
@@ -134,6 +143,12 @@ export const generateTasksFromDump = async (req: Request, res: Response) => {
       return { ...obj, id: obj._id.toString() };
     });
 
+    const user = await getUser();
+    user.brainDumpsCompleted += 1;
+    user.tasksExtracted += savedTasks.length;
+    user.actionPlansCompleted += 1;
+    await user.save();
+
     res.status(200).json({ 
       emotion: parsedResult.emotion,
       summary: parsedResult.summary,
@@ -234,6 +249,11 @@ export const generateSanctuaryResponse = async (req: Request, res: Response) => 
     }
 
     const parsedResult = JSON.parse(jsonString);
+    
+    const user = await getUser();
+    user.emotionalReflections += 1;
+    await user.save();
+
     res.status(200).json(parsedResult);
   } catch (error) {
     console.error('Sanctuary AI Error:', error);
