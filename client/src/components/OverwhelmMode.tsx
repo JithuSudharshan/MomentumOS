@@ -1,124 +1,197 @@
-import { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CheckCircle2 } from 'lucide-react';
-import { useStore } from '../store/useStore';
-import { AIOrb } from './AIOrb';
-
-const MESSAGES = [
-  'No penalties. No pressure. One micro-step at a time.',
-  'The field shifted, not failed. You are still in control.',
-  'Recovery is the objective. Let the momentum return.',
-  'Welcome back, Vanguard. The console is ready.'
-];
+import { useNavigate } from 'react-router-dom';
+import { Sparkles, Loader2, Volume2, VolumeX, ArrowLeft } from 'lucide-react';
 
 export const OverwhelmMode = () => {
-  const [motivationMsg, setMotivationMsg] = useState<string | null>(null);
-  const setOverwhelmed = useStore((state) => state.setOverwhelmed);
-  const tasks = useStore((state) => state.tasks.filter(t => t.status !== 'completed'));
-  const completeTask = useStore((state) => state.completeTask);
+  const navigate = useNavigate();
+  const [ventText, setVentText] = useState('');
+  const [isSynthesizing, setIsSynthesizing] = useState(false);
+  const [aiResponse, setAiResponse] = useState<string | null>(null);
+  const [isMuted, setIsMuted] = useState(false);
+  const audioRef = useRef<HTMLAudioElement>(null);
 
-  const sorted = [...tasks].sort((a, b) => {
-    const energyScore = { low: 1, medium: 2, high: 3 };
-    return energyScore[a.energyRequired] - energyScore[b.energyRequired];
-  });
-  const easiestTask = sorted[0];
+  // Play audio on mount
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = 0.3;
+      audioRef.current.play().catch(e => console.log('Audio autoplay blocked', e));
+    }
+  }, []);
+
+  const toggleMute = () => {
+    if (audioRef.current) {
+      audioRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
+    }
+  };
+
+  const handleVentSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!ventText.trim()) return;
+
+    setIsSynthesizing(true);
+    try {
+      const base = (import.meta as any).env.VITE_API_URL || 'http://localhost:5000';
+      const res = await fetch(`${base}/api/sanctuary`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: ventText })
+      });
+      if (!res.ok) throw new Error('API Error');
+      const data = await res.json();
+      setAiResponse(data.response);
+    } catch (error) {
+      console.error(error);
+      setAiResponse("I'm here for you. Take all the time you need to just breathe.");
+    } finally {
+      setIsSynthesizing(false);
+    }
+  };
 
   return (
     <motion.div
-      initial={{ opacity: 0, backdropFilter: 'blur(0px)' }}
-      animate={{ opacity: 1, backdropFilter: 'blur(28px)' }}
-      exit={{ opacity: 0, backdropFilter: 'blur(0px)' }}
-      transition={{ duration: 1.2, ease: 'easeInOut' }}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-background-moss/95 px-6 py-10"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 1.5, ease: 'easeInOut' }}
+      className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#0a1014] overflow-hidden"
     >
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(255,255,255,0.02),transparent_35%)]" />
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,transparent_0%,rgba(10,12,16,0.95)_70%)]" />
+      {/* Background ambient gradients */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(45,212,191,0.06),transparent_60%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom,_rgba(167,139,250,0.05),transparent_40%)] pointer-events-none" />
 
-      <div className="relative z-10 w-full max-w-3xl">
+      {/* Audio Element */}
+      <audio
+        ref={audioRef}
+        loop
+        src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=ambient-piano-and-strings-10711.mp3"
+      />
+
+      {/* Top Bar */}
+      <div className="absolute top-8 left-8 right-8 flex justify-between items-center z-20">
         <button
-          onClick={() => setOverwhelmed(false)}
-          className="mb-6 text-sm uppercase tracking-[0.35em] text-slate-300/70 hover:text-white transition"
+          onClick={() => navigate('/dashboard')}
+          className="flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-slate-500 hover:text-white transition-colors"
         >
-          Return to Sanctuary
+          <ArrowLeft className="w-4 h-4" />
+          Return to Dashboard
         </button>
-
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.2 }}
-          className="console-panel overflow-hidden border-vanguard-teal/15 p-8"
+        <button
+          onClick={toggleMute}
+          className="p-3 rounded-full border border-white/5 bg-white/5 text-slate-400 hover:text-white transition-colors"
         >
-          <div className="flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between">
-            <div>
-              <p className="text-xs uppercase tracking-[0.35em] text-vanguard-slate/70 mb-4">Welcome back, Vanguard</p>
-              <h2 className="text-4xl font-semibold text-white tracking-tight leading-tight">The field may have shifted, but the objective remains.</h2>
-              <p className="mt-4 max-w-2xl text-slate-300 leading-relaxed">Ready for Consolation? No penalties. No pressure. We start with one micro-step and dust off the rest together.</p>
-            </div>
-            <div className="mx-auto lg:mx-0">
-              <AIOrb />
-            </div>
-          </div>
+          {isMuted ? <VolumeX className="w-5 h-5" /> : <Volume2 className="w-5 h-5" />}
+        </button>
+      </div>
 
-          <div className="mt-10 grid gap-6 lg:grid-cols-[1.4fr_0.9fr]">
-            <div className="rounded-[2rem] border border-white/10 bg-background-panel/90 p-8 shadow-[0_30px_80px_rgba(0,0,0,0.32)]">
-              <div className="flex items-center justify-between text-xs uppercase tracking-[0.35em] text-slate-400 mb-5">
-                <span>Phoenix Quest</span>
-                <span className="text-vanguard-teal">Low friction</span>
-              </div>
-              <p className="text-2xl font-semibold text-white">{easiestTask ? easiestTask.title : 'Standby'}</p>
-              <p className="mt-4 text-slate-400 leading-relaxed">{easiestTask ? 'One small, calming step to bring your shield and focus back online.' : 'No active recovery tasks remain.'}</p>
-              {easiestTask && (
-                <button
-                  onClick={() => {
-                    const choice = MESSAGES[Math.floor(Math.random() * MESSAGES.length)];
-                    setMotivationMsg(choice);
-                    setTimeout(() => {
-                      completeTask(easiestTask.id);
-                      setMotivationMsg(null);
-                      if (tasks.length <= 1) setOverwhelmed(false);
-                    }, 2500);
-                  }}
-                  className="mt-8 inline-flex items-center justify-center gap-3 rounded-[1.5rem] bg-vanguard-teal/15 px-6 py-4 text-sm uppercase tracking-[0.35em] text-vanguard-teal shadow-[0_0_30px_rgba(45,212,191,0.18)] transition hover:bg-vanguard-teal/25"
-                >
-                  <CheckCircle2 className="w-5 h-5" />
-                  Begin micro-step
-                </button>
-              )}
-            </div>
+      {/* Breathing Orb */}
+      <div className="relative flex flex-col items-center justify-center mb-16 z-10">
+        <div className="relative w-64 h-64 flex items-center justify-center">
+          <motion.div
+            animate={{ 
+              scale: [1, 1.5, 1.5, 1],
+              opacity: [0.2, 0.5, 0.5, 0.2]
+            }}
+            transition={{ 
+              duration: 10,
+              times: [0, 0.4, 0.6, 1],
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+            className="absolute inset-0 rounded-full bg-vanguard-teal/20 blur-[2rem]"
+          />
+          <motion.div
+            animate={{ 
+              scale: [1, 1.25, 1.25, 1],
+            }}
+            transition={{ 
+              duration: 10,
+              times: [0, 0.4, 0.6, 1],
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+            className="relative w-32 h-32 rounded-full border border-vanguard-teal/30 bg-gradient-to-tr from-vanguard-teal/10 to-transparent shadow-[0_0_40px_rgba(45,212,191,0.2)] flex items-center justify-center backdrop-blur-md"
+          >
+            <motion.p
+              animate={{ opacity: [1, 0, 0, 1] }}
+              transition={{ duration: 10, times: [0, 0.4, 0.6, 1], repeat: Infinity, ease: "easeInOut" }}
+              className="absolute text-[10px] uppercase tracking-[0.4em] text-vanguard-teal font-medium"
+            >
+              Inhale
+            </motion.p>
+            <motion.p
+              animate={{ opacity: [0, 1, 1, 0] }}
+              transition={{ duration: 10, times: [0, 0.4, 0.6, 1], repeat: Infinity, ease: "easeInOut" }}
+              className="absolute text-[10px] uppercase tracking-[0.4em] text-vanguard-teal font-medium"
+            >
+              Exhale
+            </motion.p>
+          </motion.div>
+        </div>
+      </div>
 
-            <div className="rounded-[2rem] border border-white/10 bg-[#162020]/90 p-8 shadow-[inset_0_0_30px_rgba(255,255,255,0.04)]">
-              <p className="text-xs uppercase tracking-[0.35em] text-slate-500 mb-4">Recovery Summary</p>
-              <div className="space-y-4 text-slate-300 text-sm">
-                <div className="rounded-3xl bg-white/5 p-4">
-                  <p className="font-semibold text-white">Phoenix Target</p>
-                  <p className="mt-2 text-slate-400">A single gentle task to reconnect your system.</p>
-                </div>
-                <div className="rounded-3xl bg-white/5 p-4">
-                  <p className="font-semibold text-white">Shield status</p>
-                  <p className="mt-2 text-slate-400">Breached, but repairable through steady momentum.</p>
-                </div>
-                <div className="rounded-3xl bg-white/5 p-4">
-                  <p className="font-semibold text-white">Soft Landing</p>
-                  <p className="mt-2 text-slate-400">No guilt. Only rebuilding with a single achievable win.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <AnimatePresence>
-            {motivationMsg && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 10 }}
-                className="mt-10 rounded-[2rem] border border-vanguard-ice/15 bg-[#19232F]/90 p-8"
+      {/* Venting Node */}
+      <div className="w-full max-w-2xl px-8 z-10">
+        <AnimatePresence mode="wait">
+          {aiResponse ? (
+            <motion.div
+              key="response"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-center space-y-6"
+            >
+              <Sparkles className="w-8 h-8 text-vanguard-teal mx-auto opacity-70" />
+              <p className="text-xl md:text-2xl text-slate-300 font-light leading-relaxed max-w-xl mx-auto">
+                "{aiResponse}"
+              </p>
+              <button 
+                onClick={() => { setAiResponse(null); setVentText(''); }}
+                className="mt-8 text-[10px] uppercase tracking-[0.3em] text-vanguard-teal/60 hover:text-vanguard-teal border-b border-transparent hover:border-vanguard-teal/40 transition-all pb-1"
               >
-                <p className="text-sm uppercase tracking-[0.35em] text-vanguard-slate/70 mb-4">Console Feedback</p>
-                <p className="text-2xl font-semibold text-white">{motivationMsg}</p>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </motion.div>
+                Clear Thoughts
+              </button>
+            </motion.div>
+          ) : isSynthesizing ? (
+            <motion.div
+              key="loading"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="flex flex-col items-center justify-center gap-5 py-12"
+            >
+              <Loader2 className="w-8 h-8 text-vanguard-teal/60 animate-spin" />
+              <p className="text-slate-500 text-[10px] uppercase tracking-[0.3em] animate-pulse">Holding space for you...</p>
+            </motion.div>
+          ) : (
+            <motion.form
+              key="form"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              onSubmit={handleVentSubmit}
+              className="flex flex-col gap-6"
+            >
+              <div className="text-center mb-2">
+                <h3 className="text-2xl font-semibold text-white/90 tracking-tight">The Sanctuary</h3>
+                <p className="text-slate-400 mt-2 font-light text-sm">Everything is paused. What's on your mind right now?</p>
+              </div>
+              <textarea
+                value={ventText}
+                onChange={(e) => setVentText(e.target.value)}
+                placeholder="Type here to vent..."
+                className="w-full bg-white/[0.03] border border-white/10 rounded-[2rem] p-6 text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-vanguard-teal/50 focus:ring-1 focus:ring-vanguard-teal/50 focus:bg-white/[0.05] transition-all resize-none min-h-[140px] text-lg font-light leading-relaxed"
+              />
+              <button
+                type="submit"
+                disabled={!ventText.trim()}
+                className="self-center px-10 py-3.5 rounded-full bg-vanguard-teal/10 text-vanguard-teal border border-vanguard-teal/20 text-[11px] uppercase tracking-[0.25em] font-medium hover:bg-vanguard-teal/20 hover:scale-105 disabled:opacity-50 disabled:pointer-events-none transition-all shadow-[0_0_20px_rgba(45,212,191,0.05)]"
+              >
+                Release
+              </button>
+            </motion.form>
+          )}
+        </AnimatePresence>
       </div>
     </motion.div>
   );

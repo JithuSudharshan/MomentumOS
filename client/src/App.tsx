@@ -1,31 +1,27 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Dashboard } from './components/Dashboard';
 import { BackgroundAurora } from './components/BackgroundAurora';
 import { Landing } from './components/Landing';
+import { Sanctuary } from './pages/Sanctuary';
 import { useStore } from './store/useStore';
 
 function App() {
-  const [started, setStarted] = useState(false);
   const initializeStore = useStore((state) => state.initializeStore);
 
   React.useEffect(() => {
     initializeStore();
   }, [initializeStore]);
 
-  if (started) {
-    return (
-      <>
-        <BackgroundAurora />
-        <Dashboard />
-      </>
-    );
-  }
-
   return (
-    <>
+    <Router>
       <BackgroundAurora />
-      <Landing onStart={() => setStarted(true)} />
-    </>
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/reset" element={<Sanctuary />} />
+      </Routes>
+    </Router>
   );
 }
 
