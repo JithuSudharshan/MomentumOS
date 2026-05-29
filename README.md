@@ -11,8 +11,7 @@
 [![Gemini API](https://img.shields.io/badge/AI-Google_Gemini-orange.svg?style=for-the-badge)](https://deepmind.google/technologies/gemini/)
 [![Framer Motion](https://img.shields.io/badge/Animations-Framer_Motion-ff69b4.svg?style=for-the-badge&logo=framer)](https://www.framer.com/motion/)
 
-<img width="1909" height="1017" alt="Screenshot from 2026-05-30 02-19-02" src="https://github.com/user-attachments/assets/464a48c3-e63c-427b-829e-0569af068964" />
-
+<img width="1890" height="1006" alt="Screenshot from 2026-05-30 02-19-02 (1)" src="https://github.com/user-attachments/assets/4dd0116f-4326-47c8-b5b5-148227310998" />
 </div>
 
 ---
