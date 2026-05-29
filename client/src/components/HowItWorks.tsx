@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Award, ShieldCheck, Sparkles } from 'lucide-react';
+import { Mic, Flame, Heart } from 'lucide-react';
 
 export const HowItWorks: React.FC = () => {
     const [open, setOpen] = useState<number | null>(0);
@@ -8,69 +8,55 @@ export const HowItWorks: React.FC = () => {
     const cards = [
         {
             id: 0,
-            title: 'AI Triage & Micro-steps',
-            icon: Sparkles,
+            title: 'The Brain Dump',
+            icon: Mic,
             blurb:
-                'Drop in everything that’s on your mind. The AI triages, groups related tasks, and surfaces tiny, actionable micro-steps so starting feels effortless.',
+                'Speak your chaos. Gemini AI analyzes your overwhelm and synthesizes it into prioritized, structured tasks based on emotional weight and urgency.',
         },
         {
             id: 1,
-            title: 'Momentum → Resonance',
-            icon: Award,
+            title: 'Pause & Simplify',
+            icon: Flame,
             blurb:
-                'Small completions generate Resonance (XP). Resonance fills your collector and unlocks gentle helpful boosts — visual, meaningful progress without guilt.',
+                'Stuck? Don\'t delete. Hit "Pause & Simplify" to let AI generate an ultra-easy "Phoenix Quest" or self-care step to rebuild momentum without guilt.',
         },
         {
             id: 2,
-            title: 'Shield & Recovery Quests',
-            icon: ShieldCheck,
+            title: 'Sensory Reset Room',
+            icon: Heart,
             blurb:
-                'When you miss tasks your shield weakens. Instead of shame, you get Recovery Quests: guided repairs that rebuild capability and confidence.',
+                'When the noise is too much, enter The Sanctuary. Follow the bio-feedback breathing orb and vent to a purely empathetic, task-free AI friend.',
         },
     ];
 
     return (
-        <section id="how" className="max-w-7xl mx-auto px-6 py-12">
+        <section id="how" className="max-w-7xl mx-auto px-6 py-12 relative z-10">
             <div className="text-center max-w-3xl mx-auto">
-                <h3 className="text-2xl font-semibold text-white">How MomentumOS Works</h3>
-                <p className="mt-3 text-slate-400">An interactive system that turns to-do lists into a compassionate RPG for habit and focus.</p>
+                <h3 className="text-2xl md:text-3xl font-semibold text-white tracking-tight">The MomentumOS Engine</h3>
+                <p className="mt-3 text-slate-400">An interactive system powered by Emotionally Intelligent AI to rebuild your focus.</p>
             </div>
 
-            <div className="mt-8 grid gap-6 sm:grid-cols-3">
+            <div className="mt-12 grid gap-6 sm:grid-cols-3">
                 {cards.map((c) => {
                     const Icon = c.icon as any;
-                    const isOpen = open === c.id;
                     return (
-                        <motion.button
+                        <div
                             key={c.id}
-                            onClick={() => setOpen(isOpen ? null : c.id)}
-                            initial={{ opacity: 0, y: 8 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.35, delay: c.id * 0.06 }}
-                            className="glass-card p-6 text-left flex flex-col items-start gap-3 hover:scale-[1.01] transition"
+                            className="glass-card p-6 text-left flex flex-col items-start gap-4 hover:scale-[1.02] hover:border-white/10 transition-all border border-white/5 bg-white/[0.02] rounded-[1.5rem]"
                         >
-                            <div className="flex items-center gap-3 w-full">
-                                <div className="p-2 rounded-lg bg-white/5 border border-white/8"><Icon className="w-5 h-5 text-vanguard-ice" /></div>
+                            <div className="flex items-center gap-4 w-full">
+                                <div className="p-3 rounded-xl bg-vanguard-teal/10 border border-vanguard-teal/20"><Icon className="w-6 h-6 text-vanguard-teal" /></div>
                                 <div className="flex-1">
-                                    <div className="font-semibold text-white">{c.title}</div>
-                                    <div className="text-sm text-slate-400">{c.blurb.substring(0, 90)}{c.blurb.length > 90 ? '…' : ''}</div>
+                                    <div className="font-semibold text-white text-lg tracking-tight">{c.title}</div>
                                 </div>
-                                <div className="text-xs text-vanguard-teal">{isOpen ? 'Close' : 'Learn'}</div>
                             </div>
 
-                            {isOpen && (
-                                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-3 text-sm text-slate-300">
-                                    {c.blurb}
-                                    <div className="mt-3 text-xs text-slate-400">Try it: click a node in the Dashboard to see triage + micro-step suggestions.</div>
-                                </motion.div>
-                            )}
-                        </motion.button>
+                            <div className="text-sm text-slate-300 leading-relaxed font-light mt-2">
+                                {c.blurb}
+                            </div>
+                        </div>
                     );
                 })}
-            </div>
-
-            <div className="mt-8 text-center text-sm text-slate-400">
-                Tip: MomentumOS reframes failure as a system signal — the UI guides repair, not shame.
             </div>
         </section>
     );

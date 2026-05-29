@@ -14,13 +14,16 @@ export const Dashboard = () => {
     <div className="min-h-screen text-slate-50 relative z-10">
       <div className="max-w-7xl mx-auto px-6 py-12">
         <header className="flex items-center justify-between mb-16">
-          <div className="flex items-center gap-6">
-            <div className="scale-50 -ml-12 -my-12">
+          <button 
+            onClick={() => navigate('/')}
+            className="flex items-center gap-6 group text-left hover:opacity-90 transition-opacity"
+          >
+            <div className="scale-50 -ml-12 -my-12 group-hover:scale-[0.55] transition-transform duration-500">
               {/* Mini Orb for header */}
               <AIOrb />
             </div>
-            <h1 className="text-2xl font-light tracking-widest uppercase text-white/80">MomentumOS</h1>
-          </div>
+            <h1 className="text-2xl font-light tracking-widest uppercase text-white/80 group-hover:text-white transition-colors">MomentumOS</h1>
+          </button>
 
           <button
             onClick={() => navigate('/reset')}

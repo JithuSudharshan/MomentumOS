@@ -75,7 +75,7 @@ When the dashboard gets too noisy, enter the Sanctuary.
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/yourusername/MomentumOS.git
+   git clone https://github.com/JithuSudharshan/MomentumOS.git
    cd MomentumOS
    ```
 
@@ -124,7 +124,7 @@ MomentumOS utilizes a custom design language we call the **"Vanguard" aesthetic*
 ---
 
 ## 🤝 Contributing
-Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/yourusername/MomentumOS/issues).
+Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/JithuSudharshan/MomentumOS/issues).
 
 ## 📝 License
 This project is [MIT](https://choosealicense.com/licenses/mit/) licensed.
