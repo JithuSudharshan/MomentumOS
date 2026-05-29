@@ -25,6 +25,19 @@ export interface UserStats {
   creativity: number;
 }
 
+export interface BrainDumpResponse {
+  emotion: {
+    stress_level: string;
+    overwhelm_level: string;
+    energy_level: string;
+    dominant_emotion: string;
+  };
+  summary: string;
+  recommended_plan: string[];
+  focus_recommendation: string;
+  supportive_response: string;
+}
+
 interface AppState {
   tasks: Task[];
   stats: UserStats;
@@ -32,9 +45,9 @@ interface AppState {
   setOverwhelmed: (val: boolean) => void;
   addTask: (task: Omit<Task, 'id' | 'status'>) => void;
   completeTask: (id: string) => void;
-  failTask: (id: string) => void;
+  failTask: (id: string, reason?: string) => Promise<void>;
   recoverTask: (id: string) => void;
-  addBrainDump: (text: string) => Promise<void>;
+  addBrainDump: (text: string) => Promise<BrainDumpResponse | void>;
   initializeStore: () => Promise<void>;
 }
 
@@ -88,14 +101,18 @@ export const useStore = create<AppState>((set) => ({
     }
   },
 
-  failTask: async (id) => {
+  failTask: async (id, reason) => {
     try {
       const base = (import.meta as any).env.VITE_API_URL || 'http://localhost:5000';
-      const res = await fetch(`${base}/api/data/tasks/${id}/fail`, { method: 'PATCH' });
+      const res = await fetch(`${base}/api/data/tasks/${id}/fail`, { 
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reason })
+      });
       if (res.ok) {
-        const { stats } = await res.json();
+        const { task, microStep, stats } = await res.json();
         set((state) => ({
-          tasks: state.tasks.map(t => t.id === id ? { ...t, status: 'recovering' } : t),
+          tasks: [microStep, ...state.tasks.map(t => t.id === id ? task : t)],
           stats: stats
         }));
       }
@@ -133,6 +150,7 @@ export const useStore = create<AppState>((set) => ({
 
       const data = await response.json();
       set((state) => ({ tasks: [...data.tasks, ...state.tasks] })); // Put new tasks at the top
+      return data;
     } catch (error) {
       console.error(error);
       alert('Failed to process Brain Dump. Ensure the backend is running and has a valid GEMINI_API_KEY.');

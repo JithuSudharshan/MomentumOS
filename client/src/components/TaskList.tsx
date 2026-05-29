@@ -1,5 +1,6 @@
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Circle, Wind, Sparkles, Flame } from 'lucide-react';
+import { Circle, Wind, Sparkles, Flame, Pause, X, Loader2 } from 'lucide-react';
 import { useStore, Task } from '../store/useStore';
 
 const EnergyGlow = ({ level }: { level: Task['energyRequired'] }) => {
@@ -12,12 +13,22 @@ const EnergyGlow = ({ level }: { level: Task['energyRequired'] }) => {
 
 export const TaskList = () => {
   const allTasks = useStore((state) => state.tasks);
-  const regularTasks = allTasks.filter(t => t.status !== 'completed' && !t.isMicroStep);
+  const regularTasks = allTasks.filter(t => t.status === 'pending' && !t.isMicroStep);
   const recoveryTasks = allTasks.filter(t => t.status === 'recovering' && t.isMicroStep);
 
   const completeTask = useStore((state) => state.completeTask);
   const failTask = useStore((state) => state.failTask);
   const recoverTask = useStore((state) => state.recoverTask);
+
+  const [pausingTaskId, setPausingTaskId] = useState<string | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  const handlePause = async (taskId: string, reason: string) => {
+    setIsProcessing(true);
+    await failTask(taskId, reason);
+    setPausingTaskId(null);
+    setIsProcessing(false);
+  };
 
   const tasks = regularTasks;
   const hasRecovery = recoveryTasks.length > 0;
@@ -130,6 +141,37 @@ export const TaskList = () => {
                 exit={{ opacity: 0, y: -10, scale: 0.96, transition: { duration: 0.35 } }}
                 className="glass-card p-6 flex flex-col gap-4 overflow-hidden border border-white/10 relative"
               >
+                {/* Modal Overlay for Pausing */}
+                <AnimatePresence>
+                  {pausingTaskId === task.id && (
+                    <motion.div
+                      initial={{ opacity: 0, backdropFilter: 'blur(0px)' }}
+                      animate={{ opacity: 1, backdropFilter: 'blur(16px)' }}
+                      exit={{ opacity: 0, backdropFilter: 'blur(0px)' }}
+                      className="absolute inset-0 z-30 flex flex-col items-center justify-center bg-[#10151D]/80 border border-vanguard-ice/30 p-6 rounded-[2rem]"
+                    >
+                      {isProcessing ? (
+                        <div className="flex flex-col items-center gap-4 py-4">
+                          <Loader2 className="w-8 h-8 text-vanguard-ice animate-spin" />
+                          <p className="text-vanguard-ice/80 text-xs uppercase tracking-[0.2em] animate-pulse">Synthesizing Recovery Protocol...</p>
+                        </div>
+                      ) : (
+                        <>
+                          <h5 className="text-vanguard-ice font-semibold tracking-[0.1em] mb-5 text-center text-sm uppercase">Why are we pausing?</h5>
+                          <div className="flex flex-wrap items-center justify-center gap-3 w-full max-w-lg">
+                            <button onClick={() => handlePause(task.id, 'Too Complex')} className="flex-1 min-w-[140px] rounded-2xl border border-white/10 bg-white/5 px-4 py-4 text-xs font-semibold uppercase tracking-[0.15em] text-slate-300 transition-all hover:bg-vanguard-ice/20 hover:text-white hover:border-vanguard-ice/50 hover:shadow-[0_0_20px_rgba(167,139,250,0.2)] hover:scale-105 active:scale-95">🧩 Too Complex</button>
+                            <button onClick={() => handlePause(task.id, 'Low Energy')} className="flex-1 min-w-[140px] rounded-2xl border border-white/10 bg-white/5 px-4 py-4 text-xs font-semibold uppercase tracking-[0.15em] text-slate-300 transition-all hover:bg-vanguard-ice/20 hover:text-white hover:border-vanguard-ice/50 hover:shadow-[0_0_20px_rgba(167,139,250,0.2)] hover:scale-105 active:scale-95">🔋 Low Energy</button>
+                            <button onClick={() => handlePause(task.id, 'No Time')} className="flex-1 min-w-[140px] rounded-2xl border border-white/10 bg-white/5 px-4 py-4 text-xs font-semibold uppercase tracking-[0.15em] text-slate-300 transition-all hover:bg-vanguard-ice/20 hover:text-white hover:border-vanguard-ice/50 hover:shadow-[0_0_20px_rgba(167,139,250,0.2)] hover:scale-105 active:scale-95">⏳ No Time</button>
+                          </div>
+                          <button onClick={() => setPausingTaskId(null)} className="absolute top-5 right-5 text-slate-400 hover:text-white p-2 rounded-full hover:bg-white/10 transition-colors">
+                            <X className="w-5 h-5" />
+                          </button>
+                        </>
+                      )}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between relative z-10">
                   <div className="flex items-center gap-4">
                     <button
@@ -156,11 +198,11 @@ export const TaskList = () => {
 
                   <div className="flex flex-col gap-3 text-right sm:text-left sm:flex-row sm:items-center sm:justify-end">
                     <button
-                      onClick={() => failTask(task.id)}
-                      className="inline-flex items-center gap-2 rounded-3xl border border-white/10 bg-white/5 px-4 py-2 text-xs uppercase tracking-[0.3em] text-slate-300 transition hover:bg-vanguard-breach/10 hover:text-vanguard-breach hover:border-vanguard-breach/30"
+                      onClick={() => setPausingTaskId(task.id)}
+                      className="inline-flex items-center gap-2 rounded-3xl border border-white/10 bg-white/5 px-4 py-2 text-xs uppercase tracking-[0.2em] text-slate-300 transition hover:bg-vanguard-ice/10 hover:text-vanguard-ice hover:border-vanguard-ice/30"
                     >
-                      <Wind className="w-4 h-4" />
-                      Defer & Recover
+                      <Pause className="w-3.5 h-3.5" />
+                      Pause & Simplify
                     </button>
                   </div>
                 </div>

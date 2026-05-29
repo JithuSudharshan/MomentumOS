@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import Task from '../models/Task';
 import User from '../models/User';
+import { generateTaskMicroStep } from './aiController';
 
 // Helper to get or create the single MVP user
 const getUser = async () => {
@@ -11,21 +12,7 @@ const getUser = async () => {
   return user;
 };
 
-// Helper to generate recovery micro-step
-const generateMicroStep = (task: any): Partial<any> => {
-  const energyMap = { high: 'medium', medium: 'low', low: 'low' };
-  const xpMap = { 50: 15, 30: 10, 25: 8, 20: 5, 15: 5, 10: 3 };
 
-  return {
-    title: `${task.title.split('?')[0]} (micro-step)`,
-    category: task.category,
-    energyRequired: energyMap[task.energyRequired as keyof typeof energyMap] || 'low',
-    xpReward: (xpMap as any)[task.xpReward] || Math.max(5, Math.floor(task.xpReward / 3)),
-    status: 'recovering',
-    isMicroStep: true,
-    recoveryOf: task._id,
-  };
-};
 
 export const fetchInitialData = async (req: Request, res: Response) => {
   try {
@@ -95,8 +82,30 @@ export const failTask = async (req: Request, res: Response) => {
     task.status = 'failed';
     await task.save();
 
+    const { reason } = req.body;
+    
     // Generate recovery micro-step
-    const microStep = await Task.create(generateMicroStep(task));
+    let microStepData;
+    try {
+      microStepData = await generateTaskMicroStep(task.title, task.category, reason);
+    } catch (e) {
+      console.error('Failed to generate AI microstep, falling back to static:', e);
+      const energyMap = { high: 'medium', medium: 'low', low: 'low' };
+      const xpMap = { 50: 15, 30: 10, 25: 8, 20: 5, 15: 5, 10: 3 };
+      microStepData = {
+        title: `${task.title.split('?')[0]} (micro-step)`,
+        energyRequired: energyMap[task.energyRequired as keyof typeof energyMap] || 'low',
+        xpReward: (xpMap as any)[task.xpReward] || Math.max(5, Math.floor(task.xpReward / 3)),
+      };
+    }
+
+    const microStep = await Task.create({
+      ...microStepData,
+      category: task.category,
+      status: 'recovering',
+      isMicroStep: true,
+      recoveryOf: task._id,
+    });
 
     const user = await getUser();
     user.shieldActive = false;
