@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Flame, CheckCircle2, X } from 'lucide-react';
+import { Flame } from 'lucide-react';
 import { useStore } from '../store/useStore';
 
 export const SoftLanding = ({ onClose }: { onClose: () => void }) => {
@@ -19,126 +19,117 @@ export const SoftLanding = ({ onClose }: { onClose: () => void }) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.4 }}
+            transition={{ duration: 0.35 }}
             className="fixed inset-0 z-50 flex items-center justify-center p-6 sm:p-10"
         >
-            {/* Backdrop */}
             <motion.div
-                initial={{ opacity: 0, backdropFilter: 'blur(0px)' }}
-                animate={{ opacity: 1, backdropFilter: 'blur(8px)' }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 onClick={onClose}
-                className="absolute inset-0 bg-black/50"
+                className="absolute inset-0 bg-slate-950/80 backdrop-blur-md"
             />
 
-            {/* Modal */}
             <motion.div
-                initial={{ opacity: 0, scale: 0.92, y: 20 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.92, y: 20 }}
-                transition={{ duration: 0.4, ease: 'easeOut' }}
-                className="relative w-full sm:max-w-2xl rounded-3xl bg-gradient-to-br from-background-panel to-background-panel/80 border border-vanguard-teal/20 p-8 sm:p-12 shadow-[0_25px_50px_rgba(0,0,0,0.5)]"
+                initial={{ opacity: 0, scale: 0.96 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.96 }}
+                transition={{ duration: 0.35, ease: 'easeOut' }}
+                className="relative w-full max-w-4xl overflow-hidden rounded-[2rem] border border-white/10 bg-background-panel/95 shadow-glass"
             >
-                {/* Phoenix Icon Glow */}
-                <motion.div
-                    animate={{ scale: [1, 1.05, 1], rotate: [0, 5, -5, 0] }}
-                    transition={{ duration: 4, repeat: Infinity }}
-                    className="absolute top-6 right-6 w-16 h-16 bg-vanguard-ember/10 rounded-full blur-2xl"
-                />
-
-                {/* Close Button */}
-                <button
-                    onClick={onClose}
-                    className="absolute top-6 right-6 p-2 hover:bg-white/10 rounded-lg transition-colors z-10"
-                >
-                    <X className="w-5 h-5 text-slate-400 hover:text-white" />
-                </button>
-
-                <div className="relative z-10">
-                    {/* Header */}
-                    <div className="flex items-center gap-4 mb-8">
-                        <motion.div
-                            animate={{ y: [0, -4, 0] }}
-                            transition={{ duration: 2, repeat: Infinity }}
-                            className="p-3 bg-vanguard-ember/20 rounded-2xl text-vanguard-ember"
-                        >
-                            <Flame className="w-8 h-8" />
-                        </motion.div>
-                        <div>
-                            <p className="text-xs uppercase tracking-[0.35em] text-vanguard-ember/70 mb-1">Phoenix Quest</p>
-                            <h3 className="text-3xl font-bold text-white">Rise from the ashes</h3>
+                <div className="grid gap-8 lg:grid-cols-[1.6fr_1fr] p-8 sm:p-10">
+                    <section className="space-y-8">
+                        <div className="space-y-4">
+                            <div className="flex items-center gap-3 text-xs uppercase tracking-[0.35em] text-slate-400">
+                                <div className="h-2.5 w-2.5 rounded-full bg-vanguard-ember" />
+                                <span>Phoenix Quest</span>
+                            </div>
+                            <div className="space-y-3">
+                                <h2 className="text-4xl font-semibold tracking-tight text-white">Recover gently, stay in flow.</h2>
+                                <p className="max-w-2xl text-base leading-8 text-slate-300">
+                                    MomentumOS surfaces a single, low-friction recovery step when your shield breaks. This page helps you move forward with clarity, not pressure.
+                                </p>
+                            </div>
                         </div>
-                    </div>
 
-                    {/* Message */}
-                    <div className="mb-8 space-y-3">
-                        <p className="text-lg text-slate-100 font-light leading-relaxed">
-                            Your momentum faltered, but your shield isn't gone. Let's rebuild—one micro-step at a time.
-                        </p>
-                        <p className="text-sm text-slate-400">
-                            Complete this recovery quest to restore your Resonance and regain your protective barrier.
-                        </p>
-                    </div>
-
-                    {/* Recovery Task Card */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="mb-8 p-6 rounded-2xl bg-gradient-to-r from-white/5 to-white/3 border border-vanguard-teal/30 backdrop-blur-sm"
-                    >
-                        <div className="flex items-start justify-between gap-4">
-                            <div className="flex-1">
-                                <h4 className="text-xl font-semibold text-white mb-3">
-                                    {phoenixQuest.title}
-                                </h4>
-                                <div className="flex flex-wrap items-center gap-3 text-xs">
-                                    <span className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-slate-300 uppercase tracking-wider">
-                                        {phoenixQuest.energyRequired} energy
-                                    </span>
-                                    <span className="px-3 py-1 rounded-full bg-vanguard-teal/10 border border-vanguard-teal/30 text-vanguard-teal uppercase tracking-wider font-semibold">
-                                        +{phoenixQuest.xpReward} XP
-                                    </span>
-                                    <span className="px-3 py-1 rounded-full bg-vanguard-ice/10 border border-vanguard-ice/30 text-vanguard-ice uppercase tracking-wider">
-                                        +Resonance
-                                    </span>
+                        <div className="rounded-[1.75rem] border border-white/10 bg-white/5 p-6 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.02)] backdrop-blur-sm">
+                            <div className="flex items-center justify-between gap-4">
+                                <div>
+                                    <p className="text-sm uppercase tracking-[0.3em] text-slate-400">Current recovery task</p>
+                                    <h3 className="mt-3 text-2xl font-semibold text-white">{phoenixQuest.title}</h3>
+                                </div>
+                                <div className="rounded-3xl bg-vanguard-teal/10 px-4 py-2 text-sm font-semibold text-vanguard-teal">
+                                    Low friction
                                 </div>
                             </div>
-                            <motion.div
-                                animate={{ scale: [1, 1.1, 1] }}
-                                transition={{ duration: 2, repeat: Infinity }}
-                                className="text-vanguard-teal opacity-70"
-                            >
-                                <Flame className="w-6 h-6" />
-                            </motion.div>
+
+                            <div className="mt-6 grid gap-4 sm:grid-cols-3">
+                                <div className="rounded-3xl bg-background-panel2/90 border border-white/10 p-4 text-sm text-slate-300">
+                                    <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Energy</p>
+                                    <p className="mt-2 text-lg font-medium text-white">{phoenixQuest.energyRequired}</p>
+                                </div>
+                                <div className="rounded-3xl bg-background-panel2/90 border border-white/10 p-4 text-sm text-slate-300">
+                                    <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Reward</p>
+                                    <p className="mt-2 text-lg font-medium text-white">+{phoenixQuest.xpReward} XP</p>
+                                </div>
+                                <div className="rounded-3xl bg-background-panel2/90 border border-white/10 p-4 text-sm text-slate-300">
+                                    <p className="text-xs uppercase tracking-[0.3em] text-slate-500">Purpose</p>
+                                    <p className="mt-2 leading-6 text-slate-300">Repair shield and recover momentum with an achievable win.</p>
+                                </div>
+                            </div>
                         </div>
-                    </motion.div>
 
-                    {/* Action Buttons */}
-                    <div className="flex flex-col sm:flex-row gap-4 justify-between items-center">
-                        <button
-                            onClick={onClose}
-                            className="w-full sm:w-auto px-6 py-3 rounded-2xl bg-white/5 hover:bg-white/10 text-slate-300 hover:text-white border border-white/10 transition-all font-medium uppercase tracking-wider text-sm"
-                        >
-                            Take a moment
-                        </button>
-                        <motion.button
-                            onClick={() => {
-                                recoverTask(phoenixQuest.id);
-                                onClose();
-                            }}
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            className="w-full sm:w-auto inline-flex items-center gap-3 px-8 py-3 bg-gradient-to-r from-vanguard-teal/20 to-vanguard-teal/10 hover:from-vanguard-teal/30 hover:to-vanguard-teal/20 text-vanguard-teal border border-vanguard-teal/50 rounded-2xl font-semibold uppercase tracking-wider text-sm shadow-[0_0_30px_rgba(45,212,191,0.15)] hover:shadow-[0_0_40px_rgba(45,212,191,0.25)] transition-all"
-                        >
-                            <CheckCircle2 className="w-5 h-5" />
-                            Begin Recovery
-                        </motion.button>
-                    </div>
+                        <div className="space-y-4">
+                            <p className="text-sm text-slate-400 leading-relaxed">
+                                This is your safe rebuild step. Completing it restores your shield and honors your progress without restarting from zero.
+                            </p>
 
-                    {/* Help Text */}
-                    <p className="mt-6 text-xs text-slate-500 text-center">
-                        Recovering task: {phoenixQuest.isMicroStep ? 'Guided micro-step to rebuild your shield' : 'Recovery in progress'}
-                    </p>
+                            <div className="grid gap-4 sm:grid-cols-2">
+                                <button
+                                    onClick={onClose}
+                                    className="rounded-3xl border border-white/10 bg-white/5 px-6 py-4 text-sm font-semibold text-slate-200 transition hover:bg-white/10"
+                                >
+                                    Pause for a moment
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        recoverTask(phoenixQuest.id);
+                                        onClose();
+                                    }}
+                                    className="rounded-3xl bg-vanguard-teal px-6 py-4 text-sm font-semibold text-slate-950 shadow-[0_20px_50px_rgba(45,212,191,0.2)] transition hover:bg-vanguard-teal/90"
+                                >
+                                    Begin Phoenix Recovery
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <aside className="space-y-6 rounded-[1.75rem] border border-white/10 bg-white/5 p-6 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.03)] backdrop-blur-sm">
+                        <div className="flex items-start gap-3">
+                            <div className="mt-1 rounded-2xl bg-vanguard-ember/10 p-3 text-vanguard-ember">
+                                <Flame className="w-5 h-5" />
+                            </div>
+                            <div>
+                                <p className="text-xs uppercase tracking-[0.3em] text-slate-400">Shield status</p>
+                                <p className="mt-2 text-lg font-semibold text-white">Breach detected</p>
+                            </div>
+                        </div>
+
+                        <div className="space-y-4 text-sm text-slate-300">
+                            <div className="rounded-3xl bg-background-panel2/90 border border-white/10 p-4">
+                                <p className="font-semibold text-white">Soft Landing</p>
+                                <p className="mt-2 text-slate-400">A calm re-entry path for your focus so you can start again without friction.</p>
+                            </div>
+                            <div className="rounded-3xl bg-background-panel2/90 border border-white/10 p-4">
+                                <p className="font-semibold text-white">Recovery summary</p>
+                                <p className="mt-2 text-slate-400">Micro-step is designed to be actionable, clear, and reassuring.</p>
+                            </div>
+                            <div className="rounded-3xl bg-background-panel2/90 border border-white/10 p-4">
+                                <p className="font-semibold text-white">Momentum lens</p>
+                                <p className="mt-2 text-slate-400">One small, meaningful action restores your confidence and keeps progress alive.</p>
+                            </div>
+                        </div>
+                    </aside>
                 </div>
             </motion.div>
         </motion.div>

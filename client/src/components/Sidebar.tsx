@@ -1,11 +1,33 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Shield, ShieldAlert, Zap, Brain, Flame, Activity, Sparkles, Key, Wand } from 'lucide-react';
 import { useStore } from '../store/useStore';
 import clsx from 'clsx';
 
 export const Sidebar = () => {
   const stats = useStore((state) => state.stats);
+  const [xpDiff, setXpDiff] = React.useState(0);
+  const [isSparking, setIsSparking] = React.useState(false);
+  const prevXpRef = React.useRef(stats.xp);
+  const isInitialMount = React.useRef(true);
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      isInitialMount.current = false;
+    }, 1000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  React.useEffect(() => {
+    if (!isInitialMount.current && stats.xp > prevXpRef.current) {
+      setXpDiff(stats.xp - prevXpRef.current);
+      setIsSparking(true);
+      const t = setTimeout(() => setIsSparking(false), 2000);
+      prevXpRef.current = stats.xp;
+      return () => clearTimeout(t);
+    }
+    prevXpRef.current = stats.xp;
+  }, [stats.xp]);
 
   return (
     <motion.div
@@ -26,20 +48,62 @@ export const Sidebar = () => {
         </div>
       </div>
 
-      <div className="mb-10 rounded-[2rem] border border-white/10 bg-[#181E27]/90 p-5 shadow-[inset_0_0_20px_rgba(255,255,255,0.04)]">
-        <div className="flex items-center justify-between text-xs uppercase tracking-[0.35em] text-slate-400 mb-4">
-          <span>Resonance Collector</span>
-          <span className="text-vanguard-teal font-semibold">{stats.xp} / 1000</span>
+      <div className="mb-10 rounded-[2.5rem] border border-white/5 bg-gradient-to-br from-[#181E27]/90 to-[#10151D]/90 p-8 shadow-[inset_0_0_30px_rgba(255,255,255,0.02),0_10px_40px_rgba(0,0,0,0.5)] relative overflow-hidden group">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(45,212,191,0.05),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+        
+        <div className="flex items-end justify-between text-xs uppercase tracking-[0.35em] text-slate-400 mb-6 relative z-10">
+          <span className="font-medium tracking-[0.4em] text-white/50">Resonance</span>
+          <div className="relative flex items-baseline">
+            <span className="text-vanguard-ice font-light text-2xl tracking-wider drop-shadow-[0_0_12px_rgba(255,255,255,0.2)]">{stats.xp}</span>
+            <span className="text-slate-500 font-light ml-2 tracking-widest text-xs">/ 1000</span>
+          </div>
         </div>
-        <div className="h-20 rounded-full border border-white/10 bg-white/5 overflow-hidden relative">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(45,212,191,0.15),transparent_35%)]" />
-          <motion.div
-            initial={{ width: 0 }}
-            animate={{ width: `${Math.min((stats.xp / 1000) * 100, 100)}%` }}
-            transition={{ duration: 1.2, ease: 'easeOut' }}
-            className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-vanguard-teal via-vanguard-ice to-vanguard-ice/80 shadow-[0_0_30px_rgba(45,212,191,0.25)]"
-          />
-          <div className="absolute right-2 top-1/2 h-14 w-1.5 -translate-y-1/2 rounded-full bg-white/30 shadow-[0_0_10px_rgba(255,255,255,0.15)]" />
+        
+        <div className="relative">
+          <div className="h-14 rounded-full border border-white/10 bg-black/40 overflow-hidden relative shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)] z-10">
+            <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.02)_50%,transparent_100%)] opacity-50" />
+            <motion.div
+              initial={{ width: 0 }}
+              animate={{ width: `${Math.min((stats.xp / 1000) * 100, 100)}%` }}
+              transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1], type: 'spring', bounce: 0.3 }}
+              className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-vanguard-teal/80 via-vanguard-ice to-white shadow-[0_0_30px_rgba(45,212,191,0.5)] flex items-center justify-end pr-2"
+            >
+              <motion.div 
+                initial={{ opacity: 1, scale: 2, filter: 'blur(8px)' }}
+                animate={
+                  isSparking 
+                    ? { opacity: [0, 1, 0], scale: [1, 2.5, 1], filter: ['blur(4px)', 'blur(10px)', 'blur(4px)'] } 
+                    : { opacity: 0, scale: 1, filter: 'blur(4px)' }
+                }
+                transition={{ duration: isSparking ? 0.8 : 1.5, ease: "easeOut" }}
+                className="absolute right-0 top-1/2 -translate-y-1/2 w-12 h-20 bg-white/60 mix-blend-overlay"
+              />
+              <div className="h-2/3 w-1.5 rounded-full bg-white shadow-[0_0_15px_rgba(255,255,255,1)] relative z-10" />
+            </motion.div>
+          </div>
+
+          <div className="absolute inset-0 pointer-events-none z-20">
+            <motion.div
+              initial={{ width: 0 }}
+              animate={{ width: `${Math.min((stats.xp / 1000) * 100, 100)}%` }}
+              transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1], type: 'spring', bounce: 0.3 }}
+              className="absolute inset-y-0 left-0 flex items-center justify-end pr-2"
+            >
+              <AnimatePresence>
+                {isSparking && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 0, scale: 0.5 }}
+                    animate={{ opacity: 1, y: -45, scale: 1.3 }}
+                    exit={{ opacity: 0, y: -65, scale: 0.8 }}
+                    transition={{ duration: 1.4, ease: "easeOut" }}
+                    className="absolute right-0 -top-4 text-white font-bold text-xl drop-shadow-[0_0_15px_rgba(45,212,191,1)] z-30 pointer-events-none whitespace-nowrap"
+                  >
+                    +{xpDiff} XP
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+          </div>
         </div>
       </div>
 

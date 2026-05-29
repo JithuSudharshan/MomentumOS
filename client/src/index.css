@@ -41,7 +41,7 @@
   }
 
   .console-panel {
-    @apply bg-background-panel2/90 border border-white/10 shadow-[0_20px_90px_rgba(0, 0, 0, 0.35)] rounded-[2rem] backdrop-blur-2xl;
+    @apply bg-background-panel2/90 border border-white/10 shadow-glass rounded-[2rem] backdrop-blur-2xl;
   }
 
   @media (max-width: 640px) {

@@ -1,14 +1,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { Sparkles, Users, Award, ShieldCheck } from 'lucide-react';
 import { AIOrb } from './AIOrb';
 import { HowItWorks } from './HowItWorks';
 
-interface LandingProps {
-  onStart: () => void;
-}
-
-export const Landing: React.FC<LandingProps> = ({ onStart }) => {
+export const Landing: React.FC = () => {
+  const navigate = useNavigate();
   return (
     <div className="relative z-10 w-full overflow-x-hidden">
       <header className="max-w-7xl mx-auto px-6 py-8 flex items-center justify-between">
@@ -26,7 +24,7 @@ export const Landing: React.FC<LandingProps> = ({ onStart }) => {
           <a className="hover:text-white transition" href="#features">Features</a>
           <a className="hover:text-white transition" href="#how">How it works</a>
           <a className="hover:text-white transition" href="#pricing">Pricing</a>
-          <button onClick={onStart} className="ml-4 rounded-full bg-vanguard-teal/15 text-vanguard-teal px-4 py-2 uppercase text-xs tracking-widest">ESTABLISH CONSOLIDATION</button>
+          <button onClick={() => navigate('/dashboard')} className="ml-4 rounded-full bg-vanguard-teal/15 text-vanguard-teal px-4 py-2 uppercase text-xs tracking-widest">ESTABLISH CONSOLIDATION</button>
         </nav>
       </header>
 
@@ -42,7 +40,7 @@ export const Landing: React.FC<LandingProps> = ({ onStart }) => {
             </motion.p>
 
             <div className="mt-8 flex flex-col sm:flex-row gap-4">
-              <motion.button whileTap={{ scale: 0.98 }} onClick={onStart} className="inline-flex items-center gap-3 rounded-[1.25rem] bg-vanguard-teal/15 text-vanguard-teal px-5 py-3 font-semibold shadow-[0_20px_60px_rgba(45,212,191,0.06)]">
+              <motion.button whileTap={{ scale: 0.98 }} onClick={() => navigate('/dashboard')} className="inline-flex items-center gap-3 rounded-[1.25rem] bg-vanguard-teal/15 text-vanguard-teal px-5 py-3 font-semibold shadow-[0_20px_60px_rgba(45,212,191,0.06)]">
                 <Sparkles className="w-5 h-5" />
                 ESTABLISH CONSOLIDATION
               </motion.button>
