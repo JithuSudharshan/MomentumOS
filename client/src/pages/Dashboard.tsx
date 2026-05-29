@@ -1,11 +1,11 @@
 import { motion } from 'framer-motion';
 import { Eye } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { BrainDump } from './BrainDump';
-import { QuickAdd } from './QuickAdd';
-import { TaskList } from './TaskList';
-import { Sidebar } from './Sidebar';
-import { AIOrb } from './AIOrb';
+import { BrainDump } from '../components/BrainDump';
+import { QuickAdd } from '../components/QuickAdd';
+import { TaskList } from '../components/TaskList';
+import { Sidebar } from '../components/Sidebar';
+import { AIOrb } from '../components/AIOrb';
 
 export const Dashboard = () => {
   const navigate = useNavigate();

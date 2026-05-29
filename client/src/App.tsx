@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Dashboard } from './components/Dashboard';
+import { Dashboard } from './pages/Dashboard';
 import { BackgroundAurora } from './components/BackgroundAurora';
-import { Landing } from './components/Landing';
+import { Landing } from './pages/Landing';
 import { Sanctuary } from './pages/Sanctuary';
 import { useStore } from './store/useStore';
 

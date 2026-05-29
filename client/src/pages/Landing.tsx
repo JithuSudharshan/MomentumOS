@@ -2,8 +2,8 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Sparkles, Brain, Flame, Heart, ShieldCheck, Gamepad2, Layers } from 'lucide-react';
-import { AIOrb } from './AIOrb';
-import { HowItWorks } from './HowItWorks';
+import { AIOrb } from '../components/AIOrb';
+import { HowItWorks } from '../components/HowItWorks';
 
 export const Landing: React.FC = () => {
   const navigate = useNavigate();
