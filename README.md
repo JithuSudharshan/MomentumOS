@@ -1,122 +1,129 @@
-<<<<<<< HEAD
-# MomentumOS 🚀  
+<div align="center">
+  
+# 🌌 MomentumOS
 
-[![MIT License](https://img.shields.io/badge/License-MIT-teal.svg)](https://opensource.org/licenses/MIT)
-[![Stack](https://img.shields.io/badge/Stack-MERN%20%2B%20AI-orange.svg)](#)
-[![Deployment Status](https://img.shields.io/badge/Demo-Live-brightgreen.svg)](#)
+**An Emotionally Intelligent, AI-Powered Productivity Engine**
 
-> **“Don’t punish users for failing. Help them recover momentum.”**
+[![React](https://img.shields.io/badge/React-18-blue.svg?style=for-the-badge&logo=react)](https://reactjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-Express-green.svg?style=for-the-badge&logo=nodedotjs)](https://nodejs.org/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-Mongoose-success.svg?style=for-the-badge&logo=mongodb)](https://www.mongodb.com/)
+[![Gemini API](https://img.shields.io/badge/AI-Google_Gemini-orange.svg?style=for-the-badge)](https://deepmind.google/technologies/gemini/)
+[![Framer Motion](https://img.shields.io/badge/Animations-Framer_Motion-ff69b4.svg?style=for-the-badge&logo=framer)](https://www.framer.com/motion/)
 
-MomentumOS is an AI-driven life operating system focused on cognitive recovery, task gamification, and psychological safety. Built for developers, students, and professionals, it completely replaces toxic, rigid streak systems with an intelligent, adaptive recovery engine that scales tasks dynamically based on the user's emotional and behavioral state.
-
-[🔗 Live Application Demo](#) · [🎬 3-Minute Presentation Pitch](#) · [🐛 Issue Tracker](https://github.com/JithuSudharshan/MomentumOS/issues)
-
----
-
-## 📱 Interactive Presentation Grid
-<img width="1073" height="729" alt="image" src="https://github.com/user-attachments/assets/9f16dadb-6162-4dc2-83aa-ba6717a240ed" />
-
+</div>
 
 ---
 
-## 💎 The Killer Differentiators (Why This Wins)
+## 📖 Overview
 
-| Feature | Standard Apps | MomentumOS Approach | Technical Implementation |
-| :--- | :--- | :--- | :--- |
-| **Streak Mechanics** | Strict sequential days. Miss one day = Reset to zero. | **Recovery Buffers & Streaks**. Tracks execution resilience, rewarding the *return* to consistency. | Dynamic decay algorithm factoring runtime performance intervals over chronological dates. |
-| **Task Input** | Rigid form fields, mandatory dates, manual tags. | **Quantum Voice & Text Brain Dump**. Fluid, conversational natural language processing. | Integrated Web Audio API streaming to a Whisper/Gemini audio model. Contextual vector parsing extracts intent, emotional load, and priority metrics automatically. |
-| **Decision Paralysis** | Infinite lists causing overwhelm and fatigue. | **The "What Now?" Recommendation Engine**. Surfaces optimal next actions. | Intelligent ranking pipeline factoring current user energy levels, deadline proximity, and momentum score. |
----
+Traditional task managers assume you operate at 100% capacity all the time. **MomentumOS** is different. It is an emotionally intelligent productivity platform designed to adapt to your mental state. 
 
-## 🧠 Core System Pillars & Features
+Built with the **Google Gemini API**, MomentumOS doesn't just track tasks; it actively helps you overcome cognitive overload, executive dysfunction, and burnout through gamification, emotional validation, and AI-driven simplification.
 
-### 1. AI Intelligent Planning Engine
-* 🎙️ **Zero-Friction Voice Venting:** Users can vent unstructured audio directly into the app when overwhelmed. The system streams the audio, transcribes it, and handles the cognitive load of organizing it.
-* 🧠 **Natural Language Processing:** Parses messy, chaotic blocks of spoken or written thought, maps dependencies, and automatically generates organized, actionable task tokens.
-* 🔬 **Micro-Task Atomization:** Instantly breaks down overwhelming, massive tasks into ultra-low-friction micro-steps to bypass executive dysfunction and spark immediate action.
+## ✨ Core Features
 
-### 2. Non-Punitive Recovery Engine
-* **Adaptive Momentum Tracking:** Replaces static scores with an exponential-moving-average momentum formula. 
-* **The "Grace Period" Mechanic:** Automatically scales down task difficulties when detecting periods of high friction or emotional stagnation.
+### 🧠 The Brain Dump (Voice-to-Text AI Synthesis)
+When you're overwhelmed, typing out a structured to-do list is impossible. 
+- **Speak your chaos:** Use the built-in Web Speech API to vent your thoughts out loud.
+- **AI Synthesis:** The Gemini API analyzes your raw brain dump, detects your stress levels, and automatically structures your ramblings into organized, prioritized tasks based on urgency, importance, and emotional weight.
 
-### 3. Deep RPG Gamification System
-* **Skill Tree Progression:** Automatically maps completed tasks to user custom categories (e.g., *Frontend Engineering*, *Physical Wellness*, *Deep Focus*).
-* **Dynamic Quest Structuring:** Transforms routine assignments into rewarding high-fidelity daily campaigns complete with progression levels and custom achievement indicators.
+### 🛡️ Gamification & Shield Mechanics
+Productivity should feel rewarding, not punishing.
+- Earn **XP** and level up by completing tasks.
+- Maintain your **Streak** to keep your protective **Shield** active.
+- Tasks are categorized into RPG-style stats: *Intellect, Vitality,* and *Creativity*.
 
----
+### 🧩 Pause & Simplify (Phoenix Quests)
+Staring at a massive task you don't have the energy for? Don't delete it.
+- **Pause the task:** Tell the system *why* you are stuck ("Too Complex", "Low Energy", or "No Time").
+- **AI Micro-Steps:** The system hides the overwhelming task and uses AI to instantly generate a "Phoenix Quest"—a ridiculously simple micro-step or self-care action (e.g., "Drink a glass of water") to help you rebuild momentum and recover your Shield without guilt.
 
-## 🏗️ Technical Architecture & System Flow
-
-### Modern Engineering Stack
-* **Frontend UI:** React.js, Tailwind CSS, Framer Motion (Fluid layout animations)
-* **Backend Infrastructure:** Node.js, Express.js (Modular route handling)
-* **Persistent Data Layer:** MongoDB, Mongoose (Optimized compound indexes)
-* **Artificial Intelligence Framework:** Google Gemini / OpenAI API integration via structured semantic inputs
+### 🧘 The Sanctuary (Sensory Reset Room)
+When the dashboard gets too noisy, enter the Sanctuary.
+- **Bio-Feedback Protocol:** Follow a massive, pulsing UI orb that guides you through a 10-second Inhale/Exhale breathing loop, accompanied by ambient audio.
+- **The Venting Node:** A distraction-free input field where you can vent your frustrations. The AI is strictly instructed to provide *only* deep psychological empathy and validation—no tasks, no toxic positivity. Just a digital supportive friend.
 
 ---
 
-## ⚡ Performance & Quality-of-Code Highlights
+## 🛠️ Tech Stack
 
-* **Optimized Render Cycles:** Used customized state providers to eliminate global UI flickering during rapid task modifications.
-* **Robust Fail-Safes:** Handled structural fallbacks for AI requests; if an LLM rate limit occurs, the app safely switches to an internal heuristic prioritizing algorithm without breaking user flow.
-* **Clean Architectural Boundaries:** Distinct decoupling of data modeling logic, validation controllers, and AI routing mechanisms.
+### Frontend (Client)
+- **Framework:** React 18 (Vite) + TypeScript
+- **Styling:** Tailwind CSS (Custom "Vanguard" Glassmorphism theme)
+- **Animations:** Framer Motion (for fluid micro-interactions and layout transitions)
+- **State Management:** Zustand
+- **Routing:** React Router v6
+
+### Backend (Server)
+- **Runtime:** Node.js + Express
+- **Language:** TypeScript
+- **Database:** MongoDB (Mongoose ORM)
+- **AI Integration:** Google Generative AI SDK (`gemini-3.5-flash`)
 
 ---
 
-## 🚀 Getting Started (Local Development)
+## 🚀 Getting Started
 
 ### Prerequisites
-* Node.js (v18 or higher)
-* Local MongoDB Service or MongoDB Atlas cluster URI
-* Access Keys for OpenRouter / Gemini API
+- Node.js (v18+ recommended)
+- MongoDB running locally or a MongoDB Atlas connection string
+- A [Google Gemini API Key](https://aistudio.google.com/app/apikey)
 
-### Installation Process
+### Installation
 
-1. Clone the repository and transition to the dedicated development workspace:
-```bash
-  git clone https://github.com/JithuSudharshan/MomentumOS.git
-  cd MomentumOS
-  git checkout dev
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/yourusername/MomentumOS.git
+   cd MomentumOS
+   ```
 
-npm install
-   # If client/server are decoupled:
-   # cd client && npm install && cd ../server && npm install
-=======
-# MomentumOS — Local Development
+2. **Setup the Backend:**
+   ```bash
+   cd server
+   npm install
+   ```
+   Create a `.env` file in the `/server` directory:
+   ```env
+   PORT=5000
+   MONGO_URI=your_mongodb_connection_string
+   GEMINI_API_KEY=your_gemini_api_key
+   ```
+   Start the server:
+   ```bash
+   npm run dev
+   ```
 
-This repository contains a client (Vite + React + Tailwind) and a server (Express + MongoDB + Mongoose).
+3. **Setup the Frontend:**
+   Open a new terminal window:
+   ```bash
+   cd client
+   npm install
+   ```
+   Create a `.env` file in the `/client` directory:
+   ```env
+   VITE_API_URL=http://localhost:5000
+   ```
+   Start the client:
+   ```bash
+   npm run dev
+   ```
 
-Quick start (development):
+4. **Access the App:**
+   Open your browser and navigate to `http://localhost:5173`.
 
-1. Copy server environment variables
+---
 
-```bash
-cp server/.env.example server/.env
-# edit server/.env and set MONGO_URI and (optionally) GEMINI_API_KEY
-```
+## 🎨 Design Philosophy
+MomentumOS utilizes a custom design language we call the **"Vanguard" aesthetic**. It heavily features:
+- Deep dark modes with breathable spacing.
+- CSS backdrop-filters for frosted glass (Glassmorphism).
+- Vibrant, glowing auras (Teal, Ice, and Ember) that dynamically react to your task statuses.
 
-2. Start the server
+---
 
-```bash
-cd server
-npm install
-npm run dev
-```
+## 🤝 Contributing
+Contributions, issues, and feature requests are welcome! Feel free to check the [issues page](https://github.com/yourusername/MomentumOS/issues).
 
-3. Start the client
-
-```bash
-cd client
-npm install
-# optional: set API base url in client/.env (VITE_API_URL), otherwise defaults to http://localhost:5000
-npm run dev
-```
-
-Behavior
-
-- The server connects to MongoDB using `MONGO_URI` in `server/.env`.
-- The client reads `VITE_API_URL` (optional) to point API calls at the server.
-- Tasks created or completed via the client hit the server endpoints and persist to MongoDB.
-
-If you want the brain-dump AI pipeline, set `GEMINI_API_KEY` in `server/.env`.
->>>>>>> 1cdac8f (feat(ui): complete end-to-end overhaul to 'Relentless Vanguard' RPG theme)
+## 📝 License
+This project is [MIT](https://choosealicense.com/licenses/mit/) licensed.
