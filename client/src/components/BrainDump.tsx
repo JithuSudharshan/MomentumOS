@@ -66,7 +66,7 @@ export const BrainDump = () => {
       className="console-panel"
     >
       {/* Header Section */}
-      <div className="py-8 px-8 border-b border-white/5">
+      <div className="py-6 sm:py-8 px-5 sm:px-8 border-b border-white/5">
         <div className="flex items-start gap-4">
           <div className="p-3 bg-vanguard-teal/10 rounded-2xl text-vanguard-teal shadow-[0_0_20px_rgba(45,212,191,0.15)] flex-shrink-0 mt-1">
             <BrainCircuit className="w-6 h-6" />
@@ -90,7 +90,7 @@ export const BrainDump = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onSubmit={handleSubmit} 
-            className="p-8"
+            className="p-5 sm:p-8"
           >
             <div className="space-y-6">
               {/* Textarea */}
@@ -135,7 +135,7 @@ export const BrainDump = () => {
               </div>
 
               {/* Action Buttons */}
-              <div className="flex items-center gap-4 justify-between sm:justify-start">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full">
                 <motion.button
                   type="button"
                   onClick={toggleListen}
@@ -157,7 +157,7 @@ export const BrainDump = () => {
                   disabled={isProcessing || !text.trim()}
                   whileHover={{ scale: !isProcessing && text.trim() ? 1.05 : 1 }}
                   whileTap={{ scale: !isProcessing && text.trim() ? 0.95 : 1 }}
-                  className="ml-auto inline-flex items-center gap-3 px-6 py-3 bg-vanguard-teal/15 hover:bg-vanguard-teal/25 disabled:bg-white/5 disabled:text-white/30 text-vanguard-teal font-semibold text-sm tracking-wide uppercase rounded-2xl border border-vanguard-teal/30 hover:border-vanguard-teal/50 transition-all backdrop-blur-sm shadow-[0_0_20px_rgba(45,212,191,0.1)] disabled:shadow-none"
+                  className="sm:ml-auto w-full sm:w-auto inline-flex items-center justify-center gap-3 px-6 py-3 bg-vanguard-teal/15 hover:bg-vanguard-teal/25 disabled:bg-white/5 disabled:text-white/30 text-vanguard-teal font-semibold text-sm tracking-wide uppercase rounded-2xl border border-vanguard-teal/30 hover:border-vanguard-teal/50 transition-all backdrop-blur-sm shadow-[0_0_20px_rgba(45,212,191,0.1)] disabled:shadow-none"
                 >
                   {isProcessing ? (
                     <>
@@ -184,7 +184,7 @@ export const BrainDump = () => {
             key="response-view"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="p-8 space-y-8"
+            className="p-5 sm:p-8 space-y-6 sm:space-y-8"
           >
             {/* Empathy */}
             <div className="p-6 rounded-2xl bg-vanguard-teal/5 border border-vanguard-teal/20 shadow-[inset_0_0_20px_rgba(45,212,191,0.05)]">
@@ -224,7 +224,7 @@ export const BrainDump = () => {
               <h3 className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-4">Recommended Action Plan</h3>
               <div className="space-y-3">
                 {aiResponse.recommended_plan.map((step, idx) => (
-                  <div key={idx} className="flex items-start gap-3 bg-white/5 rounded-xl p-4 border border-white/10">
+                  <div key={idx} className="flex items-start gap-3 bg-white/5 hover:bg-white/10 rounded-xl p-4 border border-white/10 hover:border-white/30 hover:shadow-[0_8px_30px_rgba(255,255,255,0.08)] hover:-translate-y-1 transition-all duration-500 ease-out cursor-default">
                     <div className="flex-shrink-0 w-6 h-6 rounded-full bg-vanguard-teal/20 text-vanguard-teal flex items-center justify-center text-xs font-bold mt-0.5">
                       {idx + 1}
                     </div>

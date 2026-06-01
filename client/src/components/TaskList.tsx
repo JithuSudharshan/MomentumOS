@@ -39,7 +39,7 @@ export const TaskList = () => {
     return (
       <motion.div
         initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-        className="text-center p-16 console-panel"
+        className="text-center p-8 sm:p-16 console-panel"
       >
         <div className="flex justify-center mb-4">
           <Sparkles className="w-10 h-10 text-vanguard-teal opacity-70" />
@@ -71,7 +71,7 @@ export const TaskList = () => {
                 initial={{ opacity: 0, y: 24, scale: 0.98 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -10, scale: 0.96, transition: { duration: 0.35 } }}
-                className="glass-card p-6 flex flex-col gap-4 overflow-hidden border-2 border-vanguard-ember/30 bg-gradient-to-br from-vanguard-ember/5 to-vanguard-breach/5 relative"
+                className="glass-card p-5 sm:p-6 flex flex-col gap-4 overflow-hidden border-2 border-vanguard-ember/30 bg-gradient-to-br from-vanguard-ember/5 to-vanguard-breach/5 relative"
               >
                 {/* Animated glow background */}
                 <motion.div
@@ -144,7 +144,7 @@ export const TaskList = () => {
                 initial={{ opacity: 0, y: 24, scale: 0.98 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -10, scale: 0.96, transition: { duration: 0.35 } }}
-                className="glass-card p-6 flex flex-col gap-4 overflow-hidden border border-white/10 relative"
+                className="glass-card p-5 sm:p-6 flex flex-col gap-4 overflow-hidden border border-white/10 relative"
               >
                 {/* Modal Overlay for Pausing */}
                 <AnimatePresence>

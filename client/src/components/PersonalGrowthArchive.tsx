@@ -99,17 +99,17 @@ export const PersonalGrowthArchive = ({ onClose }: { onClose: () => void }) => {
       initial={{ opacity: 0, backdropFilter: 'blur(0px)' }}
       animate={{ opacity: 1, backdropFilter: 'blur(20px)' }}
       exit={{ opacity: 0, backdropFilter: 'blur(0px)' }}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-[#10151D]/80 p-6"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-[#10151D]/80 p-4 sm:p-6"
     >
       <motion.div
         initial={{ scale: 0.95, y: 20 }}
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.95, y: 20 }}
-        className="w-full max-w-5xl max-h-[85vh] overflow-y-auto console-panel p-8 md:p-12 relative border border-white/10 shadow-[0_0_50px_rgba(45,212,191,0.1)]"
+        className="w-full max-w-5xl max-h-[90vh] md:max-h-[85vh] overflow-y-auto console-panel p-6 sm:p-8 md:p-12 relative border border-white/10 shadow-[0_0_50px_rgba(45,212,191,0.1)]"
       >
         <button
           onClick={onClose}
-          className="absolute top-8 right-8 p-2 rounded-full hover:bg-white/10 text-slate-400 hover:text-white transition-colors"
+          className="absolute top-4 sm:top-8 right-4 sm:right-8 p-2 rounded-full hover:bg-white/10 text-slate-400 hover:text-white transition-colors"
         >
           <X className="w-6 h-6" />
         </button>

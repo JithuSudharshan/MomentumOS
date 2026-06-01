@@ -9,7 +9,7 @@ export const Landing: React.FC = () => {
   const navigate = useNavigate();
   return (
     <div className="relative z-10 w-full overflow-x-hidden">
-      <header className="max-w-7xl mx-auto px-6 py-8 flex items-center justify-between">
+      <header className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="h-10 w-10 rounded-lg flex items-center justify-center bg-background-panel2/80 border border-white/10 shadow-orb">
             <div className="h-6 w-6 rounded-md bg-vanguard-ice/80" />
@@ -20,37 +20,39 @@ export const Landing: React.FC = () => {
           </div>
         </div>
 
-        <nav className="hidden md:flex items-center gap-6 text-sm text-slate-300">
-          <a className="hover:text-white transition" href="#how">The Engine</a>
-          <a className="hover:text-white transition" href="#features">Philosophy</a>
-          <a className="hover:text-white transition" href="https://github.com/JithuSudharshan/MomentumOS" target="_blank" rel="noreferrer">GitHub</a>
-          <button onClick={() => navigate('/dashboard')} className="ml-4 rounded-full bg-vanguard-teal/15 text-vanguard-teal px-4 py-2 uppercase text-xs tracking-widest hover:bg-vanguard-teal/25 transition-colors">ENTER SYSTEM</button>
+        <nav className="flex items-center gap-4 sm:gap-6 text-sm text-slate-300">
+          <div className="hidden md:flex items-center gap-6">
+            <a className="hover:text-white transition" href="#how">The Engine</a>
+            <a className="hover:text-white transition" href="#features">Philosophy</a>
+            <a className="hover:text-white transition" href="https://github.com/JithuSudharshan/MomentumOS" target="_blank" rel="noreferrer">GitHub</a>
+          </div>
+          <button onClick={() => navigate('/dashboard')} className="rounded-full bg-vanguard-teal/15 text-vanguard-teal px-4 sm:px-4 py-2 uppercase text-[10px] sm:text-xs tracking-widest hover:bg-vanguard-teal/25 transition-colors">ENTER SYSTEM</button>
         </nav>
       </header>
 
       <main className="min-h-[72vh] flex items-center">
-        <div className="max-w-7xl mx-auto px-6 py-12 grid gap-10 lg:grid-cols-12 items-center">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12 grid gap-10 lg:grid-cols-12 items-center">
           <div className="lg:col-span-7 z-10">
-            <motion.h1 initial={{ y: 18, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.8 }} className="text-4xl md:text-5xl lg:text-7xl font-bold text-white tracking-tight leading-[1.1]">
+            <motion.h1 initial={{ y: 18, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.8 }} className="text-3xl md:text-5xl lg:text-7xl font-bold text-white tracking-tight leading-[1.1]">
               An Emotionally Intelligent <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-vanguard-teal via-vanguard-ice to-vanguard-ember">Productivity Engine.</span>
             </motion.h1>
 
-            <motion.p initial={{ y: 12, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.12, duration: 0.9 }} className="mt-6 text-lg text-slate-300 max-w-2xl font-light leading-relaxed">
+            <motion.p initial={{ y: 12, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.12, duration: 0.9 }} className="mt-6 text-base md:text-lg text-slate-300 max-w-2xl font-light leading-relaxed">
               Traditional task managers assume you operate at 100% capacity all the time. MomentumOS is different. Powered by AI, it adapts to your mental state, simplifies overwhelming tasks, and turns your productivity into a guilt-free, gamified experience.
             </motion.p>
 
             <div className="mt-8 flex flex-col sm:flex-row gap-4">
-              <motion.button whileTap={{ scale: 0.98 }} onClick={() => navigate('/dashboard')} className="inline-flex items-center justify-center gap-3 rounded-full bg-vanguard-teal text-background-obsidian px-8 py-4 font-semibold shadow-[0_0_40px_rgba(45,212,191,0.3)] hover:scale-105 transition-all text-sm uppercase tracking-[0.2em]">
+              <motion.button whileTap={{ scale: 0.98 }} onClick={() => navigate('/dashboard')} className="inline-flex items-center justify-center gap-3 rounded-full bg-vanguard-teal text-background-obsidian px-6 sm:px-8 py-3 sm:py-4 font-semibold shadow-[0_0_40px_rgba(45,212,191,0.3)] hover:scale-105 transition-all text-xs sm:text-sm uppercase tracking-[0.2em]">
                 <Sparkles className="w-5 h-5" />
                 Initialize System
               </motion.button>
 
-              <a href="#how" className="inline-flex items-center justify-center gap-3 rounded-full bg-white/5 text-slate-300 px-8 py-4 border border-white/10 hover:bg-white/10 transition-colors text-sm uppercase tracking-[0.2em]">View Features</a>
+              <a href="#how" className="inline-flex items-center justify-center gap-3 rounded-full bg-white/5 text-slate-300 px-6 sm:px-8 py-3 sm:py-4 border border-white/10 hover:bg-white/10 transition-colors text-xs sm:text-sm uppercase tracking-[0.2em]">View Features</a>
             </div>
           </div>
 
-          <div className="lg:col-span-5 relative h-[500px] flex items-center justify-center perspective-1000 mt-12 lg:mt-0">
+          <div className="lg:col-span-5 relative h-[350px] sm:h-[500px] flex items-center justify-center perspective-1000 mt-4 lg:mt-0 scale-[0.8] sm:scale-100 origin-center">
             {/* Ambient background glows */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_rgba(45,212,191,0.1),transparent_50%)]" />
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 scale-125">

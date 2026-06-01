@@ -45,7 +45,7 @@ export const Sidebar = ({ onOpenArchive }: { onOpenArchive?: () => void }) => {
     <motion.div
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
-      className="console-panel p-8 sticky top-10"
+      className="console-panel p-5 sm:p-8 sticky top-10"
     >
       <div className="flex items-start justify-between gap-4 mb-10">
         <div>
@@ -60,7 +60,7 @@ export const Sidebar = ({ onOpenArchive }: { onOpenArchive?: () => void }) => {
         </div>
       </div>
 
-      <div className="mb-10 rounded-[2.5rem] border border-white/5 bg-gradient-to-br from-[#181E27]/90 to-[#10151D]/90 p-8 shadow-[inset_0_0_30px_rgba(255,255,255,0.02),0_10px_40px_rgba(0,0,0,0.5)] relative overflow-hidden group">
+      <div className="mb-10 rounded-[2.5rem] border border-white/5 bg-gradient-to-br from-[#181E27]/90 to-[#10151D]/90 p-6 sm:p-8 shadow-[inset_0_0_30px_rgba(255,255,255,0.02),0_10px_40px_rgba(0,0,0,0.5)] relative overflow-hidden group">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_rgba(45,212,191,0.05),transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
         
         <div className="flex items-end justify-between text-xs uppercase tracking-[0.35em] text-slate-400 mb-6 relative z-10">
@@ -119,17 +119,17 @@ export const Sidebar = ({ onOpenArchive }: { onOpenArchive?: () => void }) => {
         </div>
       </div>
 
-      <div className="grid gap-5 mb-10 sm:grid-cols-2">
-        <div className="rounded-3xl border border-white/10 bg-white/5 p-5 shadow-[inset_0_0_18px_rgba(255,255,255,0.04)]">
+      <div className="grid gap-4 sm:gap-5 mb-10 grid-cols-2">
+        <div className="rounded-3xl border border-white/10 bg-white/5 p-4 sm:p-5 shadow-[inset_0_0_18px_rgba(255,255,255,0.04)]">
           <div className="flex items-center gap-2 mb-3 text-slate-400 uppercase tracking-[0.3em] text-[11px]">
             <Flame className="w-4 h-4 text-vanguard-ember" />
             Streak
           </div>
-          <p className="text-3xl font-semibold text-white">{stats.streak}<span className="text-slate-400 text-xs ml-2">days</span></p>
+          <p className="text-2xl sm:text-3xl font-semibold text-white">{stats.streak}<span className="text-slate-400 text-[10px] sm:text-xs ml-1 sm:ml-2">days</span></p>
         </div>
 
         <div className={clsx(
-          'rounded-3xl p-5 shadow-[inset_0_0_18px_rgba(255,255,255,0.04)] border',
+          'rounded-3xl p-4 sm:p-5 shadow-[inset_0_0_18px_rgba(255,255,255,0.04)] border',
           stats.shieldActive ? 'border-vanguard-verdant/20 bg-vanguard-verdant/10' : 'border-vanguard-breach/20 bg-vanguard-breach/10'
         )}>
           <div className="flex items-center gap-2 mb-3 text-slate-400 uppercase tracking-[0.3em] text-[11px]">
@@ -148,13 +148,20 @@ export const Sidebar = ({ onOpenArchive }: { onOpenArchive?: () => void }) => {
           Neural Pathways
         </div>
         <div className="space-y-5">
-          <SkillBar icon={<Brain className="w-4 h-4" />} label="Intellect" value={stats.intellect} color="vanguard-ice" />
-          <SkillBar icon={<Activity className="w-4 h-4" />} label="Vitality" value={stats.vitality} color="vanguard-verdant" />
-          <SkillBar icon={<Zap className="w-4 h-4" />} label="Creativity" value={stats.creativity} color="vanguard-teal" />
+          {(() => {
+            const maxStat = Math.max(stats.intellect, stats.vitality, stats.creativity, 200);
+            return (
+              <>
+                <SkillBar icon={<Brain className="w-4 h-4" />} label="Intellect" value={stats.intellect} max={maxStat} color="vanguard-ice" />
+                <SkillBar icon={<Activity className="w-4 h-4" />} label="Vitality" value={stats.vitality} max={maxStat} color="vanguard-verdant" />
+                <SkillBar icon={<Zap className="w-4 h-4" />} label="Creativity" value={stats.creativity} max={maxStat} color="vanguard-teal" />
+              </>
+            );
+          })()}
         </div>
       </div>
 
-      <div className="rounded-[2rem] border border-white/10 bg-[#181E27]/90 p-6">
+      <div className="rounded-[2rem] border border-white/10 bg-[#181E27]/90 p-5 sm:p-6">
         <div className="flex items-center justify-between mb-5 text-xs uppercase tracking-[0.35em] text-slate-400">
           <span>Recent Achievements</span>
         </div>
@@ -198,7 +205,7 @@ export const Sidebar = ({ onOpenArchive }: { onOpenArchive?: () => void }) => {
   );
 };
 
-const SkillBar = ({ icon, label, value, color }: { icon: React.ReactNode, label: string, value: number, color: string }) => (
+const SkillBar = ({ icon, label, value, max, color }: { icon: React.ReactNode, label: string, value: number, max: number, color: string }) => (
   <div>
     <div className="flex items-center justify-between text-xs text-slate-400 mb-2">
       <span className="flex items-center gap-2 uppercase tracking-[0.25em] font-light text-white/70">{icon} {label}</span>
@@ -208,7 +215,7 @@ const SkillBar = ({ icon, label, value, color }: { icon: React.ReactNode, label:
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.08),transparent_65%)]" />
       <motion.div
         initial={{ width: 0 }}
-        animate={{ width: `${Math.min((value / 200) * 100, 100)}%` }}
+        animate={{ width: `${(value / max) * 100}%` }}
         transition={{ duration: 1.1, ease: 'easeOut' }}
         className={`h-full rounded-full bg-gradient-to-r from-${color} to-${color}/70 shadow-[0_0_20px_rgba(255,255,255,0.08)]`}
       />
