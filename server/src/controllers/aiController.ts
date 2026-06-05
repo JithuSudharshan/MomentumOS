@@ -17,6 +17,21 @@ const getUser = async () => {
   return user;
 };
 
+const generateContentWithRetry = async (model: any, prompt: string, retries = 3, delayMs = 2000) => {
+  for (let i = 0; i < retries; i++) {
+    try {
+      return await model.generateContent(prompt);
+    } catch (error: any) {
+      if (error.status === 503 && i < retries - 1) {
+        console.warn(`[503 Service Unavailable] Retrying Gemini API in ${delayMs}ms... (Attempt ${i + 1}/${retries})`);
+        await new Promise(res => setTimeout(res, delayMs));
+      } else {
+        throw error;
+      }
+    }
+  }
+};
+
 export const generateTasksFromDump = async (req: Request, res: Response) => {
   try {
     const { text } = req.body;
@@ -43,8 +58,9 @@ export const generateTasksFromDump = async (req: Request, res: Response) => {
 
       Your responsibilities:
       1. Detect emotional state (stress, overwhelm, anxiety, sadness, frustration, excitement, motivation level, mental energy level).
-      2. Extract actionable tasks. Identify all explicit and implied tasks.
-      3. Detect priorities and dependencies.
+      2. Calculate a humanized 'mental_load_percentage' (0-100). Do not use a rigid formula. Base it holistically on the number of conflicting tasks, emotional intensity, expressions of exhaustion, and weight of responsibilities.
+      3. Extract actionable tasks. Identify all explicit and implied tasks.
+      4. Detect priorities and dependencies.
 
       Return ONLY valid JSON in this exact format:
 
@@ -53,6 +69,7 @@ export const generateTasksFromDump = async (req: Request, res: Response) => {
           "stress_level": "low | medium | high",
           "overwhelm_level": "low | medium | high",
           "energy_level": "low | medium | high",
+          "mental_load_percentage": <integer 0-100>,
           "dominant_emotion": "..."
         },
         "summary": "Short summary of the user's state and needs",
@@ -97,9 +114,9 @@ export const generateTasksFromDump = async (req: Request, res: Response) => {
       User Input: "${text}"
     `;
 
-    const result = await model.generateContent(prompt);
+    const result = await generateContentWithRetry(model, prompt);
     const response = await result.response;
-    let jsonString = response.text();
+    let jsonString = response.text().trim();
     
     // Clean up markdown block if present
     if (jsonString.startsWith('\`\`\`json')) {
@@ -190,7 +207,7 @@ export const generateTaskMicroStep = async (taskTitle: string, category: string,
     }
   `;
 
-  const result = await model.generateContent(prompt);
+  const result = await generateContentWithRetry(model, prompt);
   const response = await result.response;
   let jsonString = response.text();
   
@@ -238,7 +255,7 @@ export const generateSanctuaryResponse = async (req: Request, res: Response) => 
       }
     `;
 
-    const result = await model.generateContent(prompt);
+    const result = await generateContentWithRetry(model, prompt);
     const response = await result.response;
     let jsonString = response.text();
     

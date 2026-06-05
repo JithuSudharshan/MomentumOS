@@ -193,27 +193,96 @@ export const BrainDump = () => {
 
             {/* Emotional State */}
             <div>
-              <h3 className="text-xs font-semibold uppercase tracking-widest text-slate-500 mb-4">Detected State</h3>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="bg-white/5 rounded-xl p-4 border border-white/10 flex items-center gap-3">
-                  <Activity className="w-5 h-5 text-rose-400" />
-                  <div>
-                    <p className="text-xs text-slate-400 uppercase tracking-wider mb-0.5">Stress</p>
-                    <p className="text-sm font-medium text-white capitalize">{aiResponse.emotion.stress_level}</p>
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-xs font-semibold uppercase tracking-widest text-slate-500">Cognitive Load Analysis</h3>
+              </div>
+              
+              <div className="bg-white/[0.02] border border-white/5 rounded-3xl p-6 sm:p-8 mb-6 shadow-[inset_0_0_40px_rgba(255,255,255,0.01)] backdrop-blur-sm relative overflow-hidden">
+                {/* Background Glows */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-1/2 bg-gradient-to-b from-white/[0.03] to-transparent rounded-full blur-3xl -z-10" />
+                
+                {/* Gauge Component Inline */}
+                <div className="flex flex-col items-center justify-center pt-4 pb-6">
+                  <div className="relative w-72 h-36 overflow-hidden">
+                    <svg className="w-full h-full drop-shadow-[0_0_15px_rgba(255,255,255,0.05)]" viewBox="0 0 264 132">
+                      {/* Background Arc */}
+                      <path
+                        d="M 12 132 A 120 120 0 0 1 252 132"
+                        fill="none"
+                        stroke="rgba(255,255,255,0.05)"
+                        strokeWidth="24"
+                        strokeLinecap="round"
+                      />
+                      {/* Foreground Arc */}
+                      <motion.path
+                        d="M 12 132 A 120 120 0 0 1 252 132"
+                        fill="none"
+                        stroke={
+                          (aiResponse.emotion.mental_load_percentage || 50) > 80 ? '#fb7185' : 
+                          (aiResponse.emotion.mental_load_percentage || 50) > 50 ? '#fbbf24' : '#2dd4bf'
+                        }
+                        strokeWidth="24"
+                        strokeLinecap="round"
+                        strokeDasharray={120 * Math.PI}
+                        initial={{ strokeDashoffset: 120 * Math.PI }}
+                        animate={{ strokeDashoffset: (120 * Math.PI) - ((aiResponse.emotion.mental_load_percentage || 50) / 100) * (120 * Math.PI) }}
+                        transition={{ duration: 1.8, ease: "easeOut", delay: 0.3 }}
+                        style={{ 
+                          filter: `drop-shadow(0 0 12px ${
+                            (aiResponse.emotion.mental_load_percentage || 50) > 80 ? '#fb718580' : 
+                            (aiResponse.emotion.mental_load_percentage || 50) > 50 ? '#fbbf2480' : '#2dd4bf80'
+                          })` 
+                        }}
+                      />
+                    </svg>
+                    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 flex flex-col items-center pb-2">
+                      <motion.span 
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 1 }}
+                        className="text-5xl font-extrabold text-white tracking-tight"
+                        style={{ 
+                          textShadow: `0 0 30px ${
+                            (aiResponse.emotion.mental_load_percentage || 50) > 80 ? '#fb718560' : 
+                            (aiResponse.emotion.mental_load_percentage || 50) > 50 ? '#fbbf2460' : '#2dd4bf60'
+                          }` 
+                        }}
+                      >
+                        {aiResponse.emotion.mental_load_percentage || 50}%
+                      </motion.span>
+                      <span className="text-[10px] uppercase tracking-[0.2em] text-slate-400 font-semibold mt-2">Mental Load</span>
+                    </div>
                   </div>
                 </div>
-                <div className="bg-white/5 rounded-xl p-4 border border-white/10 flex items-center gap-3">
-                  <Wind className="w-5 h-5 text-sky-400" />
-                  <div>
-                    <p className="text-xs text-slate-400 uppercase tracking-wider mb-0.5">Overwhelm</p>
-                    <p className="text-sm font-medium text-white capitalize">{aiResponse.emotion.overwhelm_level}</p>
+
+                {/* Sub-metrics */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                  <div className="bg-white/[0.03] rounded-2xl p-4 border border-white/5 flex items-center gap-4 hover:bg-white/[0.05] transition-colors">
+                    <div className="p-2.5 rounded-xl bg-rose-400/10 text-rose-400">
+                      <Activity className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <p className="text-[10px] text-slate-400 uppercase tracking-widest mb-0.5">Stress</p>
+                      <p className="text-sm font-semibold text-white capitalize">{aiResponse.emotion.stress_level}</p>
+                    </div>
                   </div>
-                </div>
-                <div className="bg-white/5 rounded-xl p-4 border border-white/10 flex items-center gap-3">
-                  <Zap className="w-5 h-5 text-amber-400" />
-                  <div>
-                    <p className="text-xs text-slate-400 uppercase tracking-wider mb-0.5">Energy</p>
-                    <p className="text-sm font-medium text-white capitalize">{aiResponse.emotion.energy_level}</p>
+                  <div className="bg-white/[0.03] rounded-2xl p-4 border border-white/5 flex items-center gap-4 hover:bg-white/[0.05] transition-colors">
+                    <div className="p-2.5 rounded-xl bg-sky-400/10 text-sky-400">
+                      <Wind className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <p className="text-[10px] text-slate-400 uppercase tracking-widest mb-0.5">Overwhelm</p>
+                      <p className="text-sm font-semibold text-white capitalize">{aiResponse.emotion.overwhelm_level}</p>
+                    </div>
+                  </div>
+                  <div className="bg-white/[0.03] rounded-2xl p-4 border border-white/5 flex items-center gap-4 hover:bg-white/[0.05] transition-colors">
+                    <div className="p-2.5 rounded-xl bg-amber-400/10 text-amber-400">
+                      <Zap className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <p className="text-[10px] text-slate-400 uppercase tracking-widest mb-0.5">Energy</p>
+                      <p className="text-sm font-semibold text-white capitalize">{aiResponse.emotion.energy_level}</p>
+                    </div>
                   </div>
                 </div>
               </div>

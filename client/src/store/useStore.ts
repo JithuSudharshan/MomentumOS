@@ -39,6 +39,7 @@ export interface BrainDumpResponse {
     stress_level: string;
     overwhelm_level: string;
     energy_level: string;
+    mental_load_percentage: number;
     dominant_emotion: string;
   };
   summary: string;
@@ -64,19 +65,15 @@ interface AppState {
 }
 
 export const useStore = create<AppState>((set) => ({
-  tasks: [
-    { id: '1', title: 'Finish Math Assignment', category: 'Intellect', energyRequired: 'high', status: 'pending', xpReward: 50 },
-    { id: '2', title: 'Do Laundry', category: 'Vitality', energyRequired: 'low', status: 'pending', xpReward: 10 },
-    { id: '3', title: 'Drink Water', category: 'Vitality', energyRequired: 'low', status: 'pending', xpReward: 5 },
-  ],
+  tasks: [],
   stats: {
-    level: 5,
-    xp: 450,
-    streak: 12,
+    level: 1,
+    xp: 0,
+    streak: 0,
     shieldActive: true,
-    intellect: 120,
-    vitality: 80,
-    creativity: 40,
+    intellect: 0,
+    vitality: 0,
+    creativity: 0,
     brainDumpsCompleted: 0,
     tasksExtracted: 0,
     actionPlansCompleted: 0,
