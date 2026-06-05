@@ -18,32 +18,35 @@
 
 ## 📖 Overview
 
-Traditional task managers assume you operate at 100% capacity all the time. **MomentumOS** is different. It is an emotionally intelligent productivity platform designed to adapt to your mental state. 
+Traditional task managers assume you operate at 100% capacity all the time. **MomentumOS** is different. It is an emotionally intelligent productivity platform designed specifically for the overwhelmed mind. 
 
-Built with the **Google Gemini API**, MomentumOS doesn't just track tasks; it actively helps you overcome cognitive overload, executive dysfunction, and burnout through gamification, emotional validation, and AI-driven simplification.
+Built with the **Google Gemini API**, MomentumOS doesn't just track tasks; it actively helps you overcome cognitive overload, executive dysfunction, and burnout through empathy, emotional validation, gamification, and AI-driven simplification.
 
 ## ✨ Core Features
 
-### 🧠 The Brain Dump (Voice-to-Text AI Synthesis)
+### 🧠 Emotionally Intelligent Brain Dump & Priority Scoring
 When you're overwhelmed, typing out a structured to-do list is impossible. 
-- **Speak your chaos:** Use the built-in Web Speech API to vent your thoughts out loud.
-- **AI Synthesis:** The Gemini API analyzes your raw brain dump, detects your stress levels, and automatically structures your ramblings into organized, prioritized tasks based on urgency, importance, and emotional weight.
+- **Speak your chaos:** Use the built-in Web Speech API or text input to vent your raw thoughts out loud.
+- **AI Synthesis & Multi-Variable Priority:** Gemini analyzes your dump to detect tasks, but it doesn't just sort by deadline. It scores tasks based on urgency, importance, and *emotional weight*, generating deeply supportive action plans.
 
-### 🛡️ Gamification & Shield Mechanics
-Productivity should feel rewarding, not punishing.
-- Earn **XP** and level up by completing tasks.
-- Maintain your **Streak** to keep your protective **Shield** active.
-- Tasks are categorized into RPG-style stats: *Intellect, Vitality,* and *Creativity*.
+### 🔋 The Overwhelm Meter
+- Our Gemini AI analyzes your emotional state to calculate a humanized **"Mental Load Percentage."**
+- A stunning, responsive semi-circle radial gauge visually tracks your cognitive overwhelm in real-time.
 
-### 🧩 Pause & Simplify (Phoenix Quests)
+### 🛡️ Gamification & Resilience Badges
+Productivity should build mental fortitude, not feel punishing.
+- **Stats & Streaks:** Earn XP, level up, and maintain your streak to keep your protective **Shield** active. Tasks upgrade RPG-style stats: *Intellect, Vitality,* and *Creativity*.
+- **Gamified Resilience Badges:** Users don't just check off tasks; they build resilience. We implemented an emotionally rewarding 3-state badge lifecycle (Locked, Eligible, Claimed) where users manually claim achievements with satisfying aesthetic glows.
+
+### 🧩 Recovery Protocol & Micro-Steps
 Staring at a massive task you don't have the energy for? Don't delete it.
 - **Pause the task:** Tell the system *why* you are stuck ("Too Complex", "Low Energy", or "No Time").
-- **AI Micro-Steps:** The system hides the overwhelming task and uses AI to instantly generate a "Phoenix Quest"—a ridiculously simple micro-step or self-care action (e.g., "Drink a glass of water") to help you rebuild momentum and recover your Shield without guilt.
+- **AI Micro-Steps:** The system triggers a "Recovery Protocol" providing a ridiculously simple micro-step or self-care action (e.g., "Drink a glass of water") to help you rebuild momentum and recover without guilt.
 
 ### 🧘 The Sanctuary (Sensory Reset Room)
-When the dashboard gets too noisy, enter the Sanctuary.
+When the dashboard gets too noisy and the Overwhelm Meter spikes, enter the Sanctuary.
 - **Bio-Feedback Protocol:** Follow a massive, pulsing UI orb that guides you through a 10-second Inhale/Exhale breathing loop, accompanied by ambient audio.
-- **The Venting Node:** A distraction-free input field where you can vent your frustrations. The AI is strictly instructed to provide *only* deep psychological empathy and validation—no tasks, no toxic positivity. Just a digital supportive friend.
+- **The Venting Node:** A distraction-free input field where you can vent your frustrations. The AI is strictly instructed to provide *only* deep psychological empathy and validation—no tasks, no toxic positivity.
 
 ---
 
@@ -52,9 +55,10 @@ When the dashboard gets too noisy, enter the Sanctuary.
 ### Frontend (Client)
 - **Framework:** React 18 (Vite) + TypeScript
 - **Styling:** Tailwind CSS (Custom "Vanguard" Glassmorphism theme)
-- **Animations:** Framer Motion (for fluid micro-interactions and layout transitions)
+- **Animations:** Framer Motion (for fluid micro-interactions and radial gauge transitions)
 - **State Management:** Zustand
 - **Routing:** React Router v6
+- **Progressive Web App (PWA):** Vite PWA Plugin support
 
 ### Backend (Server)
 - **Runtime:** Node.js + Express
@@ -120,6 +124,7 @@ MomentumOS utilizes a custom design language we call the **"Vanguard" aesthetic*
 - Deep dark modes with breathable spacing.
 - CSS backdrop-filters for frosted glass (Glassmorphism).
 - Vibrant, glowing auras (Teal, Ice, and Ember) that dynamically react to your task statuses.
+- Emotionally resonant colors for high-stress visualization (Overwhelm Meter).
 
 ---
 
